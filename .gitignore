@@ -1,0 +1,30 @@
+# Python & Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Sensitive Data & Runtime Storage (SOC Audits, Biometric Vault, Model Checkpoints)
+data/incidents/
+data/models_cache/
+data/vault/
+
+# Environment & Credentials
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.cert
+
+# IDE & Editor Configs
+.idea/
+.vscode/
+.agents/
+.gemini/
