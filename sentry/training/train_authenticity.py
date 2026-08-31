@@ -136,7 +136,7 @@ def train_authenticity_model(
 
         print(f"Epoch {epoch:02d}/{epochs:02d} [{elapsed:.1f}s] | Train Loss: {avg_train_loss:.4f} Acc: {train_acc:.1f}% | Val EER: {val_eer:.2f}% | AUC: {val_auc:.4f} | min t-DCF: {val_tdcf}")
 
-        if val_eer < best_val_eer:
+        if val_eer <= best_val_eer:
             best_val_eer = val_eer
             torch.save(model.state_dict(), best_model_path)
 
