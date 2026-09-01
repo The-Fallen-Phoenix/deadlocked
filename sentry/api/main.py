@@ -53,6 +53,10 @@ app.add_middleware(
 static_dir = Path(__file__).resolve().parent.parent / "ui" / "static"
 if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    if (static_dir / "css").exists():
+        app.mount("/css", StaticFiles(directory=str(static_dir / "css")), name="css")
+    if (static_dir / "js").exists():
+        app.mount("/js", StaticFiles(directory=str(static_dir / "js")), name="js")
 
 
 # Pydantic Request Models

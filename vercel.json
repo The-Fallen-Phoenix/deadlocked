@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "sentry-voice-security",
+  "builds": [
+    {
+      "src": "sentry/ui/static/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/sentry/ui/static/$1"
+    }
+  ]
+}
