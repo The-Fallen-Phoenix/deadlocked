@@ -67,36 +67,54 @@ class SentryRiskEngine:
         raw_score = (c_synth + c_spk + c_exp + c_beh + c_ctx) * 100.0
         raw_score = float(np.clip(raw_score, 0.0, 100.0))
 
-        # Determine Risk Tier
+        # Determine Risk Tier and Action Code
         if raw_score <= self.weights.threshold_low:
             tier = "LOW"
+            action_code = "ALLOW"
             color = "#10B981"  # Emerald Green
             recommendation = "Interaction authenticated. Proceed normally."
         elif raw_score <= self.weights.threshold_moderate:
             tier = "MODERATE"
+            action_code = "ALERT"
             color = "#F59E0B"  # Amber
             recommendation = "Step-up authentication recommended (OTP, secondary factor)."
         elif raw_score <= self.weights.threshold_high:
             tier = "HIGH"
+            action_code = "DYNAMIC_CHALLENGE"
             color = "#EF5350"  # Red
             recommendation = "Transaction flagged for manual SOC review. Consider freezing."
         else:
             tier = "CRITICAL"
+            action_code = "TRANSACTION_FREEZE"
             color = "#DC2626"  # Dark Red
             recommendation = "IMMEDIATE ACTION: Freeze transaction and alert Security Operations Center."
+
+        total_contrib = c_synth + c_spk + c_exp + c_beh + c_ctx
+        if total_contrib > 0:
+            contributors_pct = {
+                "synthetic_voice": round((c_synth / total_contrib) * 100.0, 1),
+                "speaker_mismatch": round((c_spk / total_contrib) * 100.0, 1),
+                "transaction_exposure": round((c_exp / total_contrib) * 100.0, 1),
+                "behavioral_threat": round((c_beh / total_contrib) * 100.0, 1),
+                "context_anomaly": round((c_ctx / total_contrib) * 100.0, 1)
+            }
+        else:
+            contributors_pct = {
+                "synthetic_voice": 35.0,
+                "speaker_mismatch": 25.0,
+                "transaction_exposure": 15.0,
+                "behavioral_threat": 15.0,
+                "context_anomaly": 10.0
+            }
 
         return {
             "overall_risk_score": round(raw_score, 1),
             "risk_tier": tier,
+            "action_code": action_code,
             "color_indicator": color,
             "recommendation": recommendation,
-            "component_scores": {
-                "synthetic_voice_contribution_pct": round(c_synth * 100.0, 1),
-                "speaker_mismatch_contribution_pct": round(c_spk * 100.0, 1),
-                "transaction_exposure_contribution_pct": round(c_exp * 100.0, 1),
-                "behavioral_threat_contribution_pct": round(c_beh * 100.0, 1),
-                "context_anomaly_contribution_pct": round(c_ctx * 100.0, 1)
-            },
+            "contributors_percentage": contributors_pct,
+            "component_scores": contributors_pct,
             "thresholds": {
                 "low_threshold": self.weights.threshold_low,
                 "moderate_threshold": self.weights.threshold_moderate,
