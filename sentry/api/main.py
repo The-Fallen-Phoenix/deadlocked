@@ -8,8 +8,8 @@ import time
 import uuid
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-import numpy as np
 
+import numpy as np
 from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
