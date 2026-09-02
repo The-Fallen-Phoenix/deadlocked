@@ -4,6 +4,7 @@ Audio preprocessing and standardization pipeline for SENTRY.
 
 import io
 import base64
+from pathlib import Path
 from typing import Tuple, Optional, Union
 import numpy as np
 import scipy.io.wavfile as wavfile
@@ -18,6 +19,45 @@ class AudioPreprocessor:
 
     def __init__(self, target_sample_rate: int = 16000):
         self.target_sr = target_sample_rate
+
+    def load_audio_from_file(self, filepath: Union[str, Path]) -> Tuple[np.ndarray, int]:
+        """
+        Loads and decodes audio from a file path (supporting .wav, .mp3, .m4a, .flac, etc.)
+        Resamples audio to target sample rate (default 16kHz float32 mono).
+        """
+        filepath = Path(filepath)
+        if not filepath.exists():
+            raise FileNotFoundError(f"Audio file does not exist: {filepath}")
+
+        # 1. Try PyAV (av) for broad format support including M4A and MP3
+        try:
+            import av
+            container = av.open(str(filepath))
+            resampler = av.audio.resampler.AudioResampler(format='flt', layout='mono', rate=self.target_sr)
+            audio_frames = []
+            for frame in container.decode(audio=0):
+                resampled_frames = resampler.resample(frame)
+                for rframe in resampled_frames:
+                    audio_frames.append(rframe.to_ndarray())
+            if audio_frames:
+                audio = np.concatenate(audio_frames, axis=1).squeeze()
+                return audio.astype(np.float32), self.target_sr
+        except Exception:
+            pass
+
+        # 2. Fallback to soundfile
+        try:
+            import soundfile as sf
+            data, orig_sr = sf.read(str(filepath), dtype="float32")
+            if len(data.shape) > 1:
+                data = np.mean(data, axis=1)
+            return self.resample_if_needed(data, orig_sr)
+        except Exception:
+            pass
+
+        # 3. Fallback to reading file bytes via load_audio_from_bytes
+        with open(filepath, "rb") as f:
+            return self.load_audio_from_bytes(f.read())
 
     def load_audio_from_bytes(self, audio_bytes: bytes) -> Tuple[np.ndarray, int]:
         """
@@ -84,3 +124,4 @@ class AudioPreprocessor:
 
 
 audio_preprocessor = AudioPreprocessor()
+

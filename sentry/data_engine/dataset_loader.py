@@ -6,7 +6,7 @@ Supports ASVspoof protocol, WaveFake vocoder directories, and procedural benchma
 import os
 import random
 from pathlib import Path
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Dict, Any, Tuple, Optional, Union
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -46,8 +46,11 @@ class SentryAuthenticityDataset(Dataset):
         
         # Load audio (either from file path or generated array)
         if "filepath" in item and Path(item["filepath"]).exists():
-            with open(item["filepath"], "rb") as f:
-                audio, _ = audio_preprocessor.load_audio_from_bytes(f.read())
+            try:
+                audio, _ = audio_preprocessor.load_audio_from_file(item["filepath"])
+            except Exception:
+                with open(item["filepath"], "rb") as f:
+                    audio, _ = audio_preprocessor.load_audio_from_bytes(f.read())
         elif "audio" in item:
             audio = item["audio"]
         else:
@@ -135,6 +138,113 @@ class DatasetBuilder:
     """Utility to generate balanced training, validation, and test splits."""
 
     @staticmethod
+    def build_real_vs_fake_split(
+        dataset_dir: Union[str, Path] = "data/voice_dataset",
+        train_ratio: float = 0.8,
+        seed: int = 42
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        """
+        Scans imported Real vs Fake Voice dataset directory structure:
+        dataset_dir/{UK,USA}/{male,female}/{speaker_folder}/
+           ├── original.wav / original.m4a (REAL -> label 0)
+           ├── synthetic_1.mp3 (FAKE -> label 1)
+           ├── synthetic_2.mp3 (FAKE -> label 1)
+           └── synthetic_3.mp3 (FAKE -> label 1)
+
+        Performs a SMART SPEAKER-AWARE 80-20 SPLIT (GroupKFold):
+        80% of speaker IDs to Train, 20% to Test.
+        Returns (train_samples, test_samples).
+        """
+        root_path = Path(dataset_dir)
+        if not root_path.exists():
+            print(f"[!] Dataset path {root_path} not found. Falling back to synthetic benchmark split.")
+            train = DatasetBuilder.build_synthetic_benchmark_split(100, 100)
+            val = DatasetBuilder.build_synthetic_benchmark_split(30, 30)
+            return train, val
+
+        # Group audio samples by speaker_id to prevent data leakage
+        speakers: Dict[str, List[Dict[str, Any]]] = {}
+
+        for filepath in root_path.rglob("*"):
+            if not filepath.is_file():
+                continue
+
+            fname_lower = filepath.name.lower()
+            if not (fname_lower.endswith(".m4a") or fname_lower.endswith(".mp3") or fname_lower.endswith(".wav")):
+                continue
+
+            # Derive speaker_id from path components
+            # e.g., dataset_voice/USA/male/1/original.m4a -> speaker_id = "USA_male_1"
+            rel_parts = filepath.relative_to(root_path).parts
+            if len(rel_parts) >= 3:
+                speaker_id = "_".join(rel_parts[:-1])
+            else:
+                speaker_id = filepath.parent.name
+
+            # Determine real vs fake label
+            if "original" in fname_lower:
+                label = 0  # REAL / HUMAN
+                voice_type = "real"
+            elif "synthetic" in fname_lower or "fake" in fname_lower:
+                label = 1  # FAKE / AI SYNTHETIC
+                voice_type = "fake"
+            else:
+                continue
+
+            sample_record = {
+                "id": filepath.stem,
+                "filepath": str(filepath),
+                "label": label,
+                "type": voice_type,
+                "speaker_id": speaker_id
+            }
+
+            if speaker_id not in speakers:
+                speakers[speaker_id] = []
+            speakers[speaker_id].append(sample_record)
+
+        # Smart Speaker-Aware 80-20 Split
+        speaker_ids = sorted(list(speakers.keys()))
+        rng = random.Random(seed)
+        rng.shuffle(speaker_ids)
+
+        num_train_speakers = int(len(speaker_ids) * train_ratio)
+        train_speakers = set(speaker_ids[:num_train_speakers])
+        test_speakers = set(speaker_ids[num_train_speakers:])
+
+        train_samples_raw = []
+        test_samples = []
+
+        for spk_id, samples in speakers.items():
+            if spk_id in train_speakers:
+                train_samples_raw.extend(samples)
+            else:
+                test_samples.extend(samples)
+
+        # Balance training set (Oversample Class 0 - Real voices to match Class 1 - Fake voices)
+        real_train = [s for s in train_samples_raw if s["label"] == 0]
+        fake_train = [s for s in train_samples_raw if s["label"] == 1]
+
+        train_samples = []
+        if real_train and fake_train:
+            target_count = max(len(real_train), len(fake_train))
+            multiplier = (target_count // len(real_train)) + 1
+            balanced_real = (real_train * multiplier)[:target_count]
+            train_samples = balanced_real + fake_train
+        else:
+            train_samples = train_samples_raw
+
+        rng.shuffle(train_samples)
+        rng.shuffle(test_samples)
+
+        print(f"[*] Loaded Real vs. Fake Voice Dataset from {root_path}:")
+        print(f"    - Total Speakers: {len(speaker_ids)} (Train: {len(train_speakers)}, Test: {len(test_speakers)})")
+        print(f"    - Train Samples (Balanced): {len(train_samples)} (Real: {sum(1 for s in train_samples if s['label']==0)}, Fake: {sum(1 for s in train_samples if s['label']==1)})")
+        print(f"    - Test Samples (20%):       {len(test_samples)} (Real: {sum(1 for s in test_samples if s['label']==0)}, Fake: {sum(1 for s in test_samples if s['label']==1)})")
+
+        return train_samples, test_samples
+
+    @staticmethod
     def build_synthetic_benchmark_split(
         num_genuine: int = 100,
         num_synthetic: int = 100
@@ -169,3 +279,4 @@ class DatasetBuilder:
 
 
 dataset_builder = DatasetBuilder()
+

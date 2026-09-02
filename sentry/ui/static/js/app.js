@@ -120,15 +120,15 @@ const App = {
     if (isStreaming) {
       startBtn.style.display = 'none';
       stopBtn.style.display = 'inline-flex';
-      pulse.style.backgroundColor = '#ef4444';
-      pulse.style.boxShadow = '0 0 12px #ef4444';
+      pulse.style.backgroundColor = '#ff6b00';
+      pulse.style.boxShadow = '0 0 12px #ff6b00';
       label.textContent = 'STREAMING LIVE (Sliding Window 2.0s)';
-      label.style.color = '#ef4444';
+      label.style.color = '#ff8533';
     } else {
       startBtn.style.display = 'inline-flex';
       stopBtn.style.display = 'none';
-      pulse.style.backgroundColor = '#10b981';
-      pulse.style.boxShadow = '0 0 8px #10b981';
+      pulse.style.backgroundColor = 'rgba(255, 107, 0, 0.4)';
+      pulse.style.boxShadow = '0 0 8px rgba(255, 107, 0, 0.4)';
       label.textContent = 'STANDBY / READY';
       label.style.color = '#94a3b8';
     }
@@ -148,17 +148,17 @@ const App = {
     if (circle && text && tier) {
       Charts.updateRiskGauge(circle, text, risk.overall_risk_score, risk.risk_tier);
       tier.textContent = `${risk.risk_tier} RISK`;
-      tier.style.color = risk.tier_color;
+      tier.style.color = '#ffffff';
     }
 
     // Update Layer bars
     document.getElementById('live-synth-prob').textContent = `${(auth.synthetic_probability * 100).toFixed(1)}%`;
     document.getElementById('live-synth-bar').style.width = `${auth.synthetic_probability * 100}%`;
-    document.getElementById('live-synth-bar').style.backgroundColor = auth.synthetic_probability > 0.7 ? '#ef4444' : '#10b981';
+    document.getElementById('live-synth-bar').style.backgroundColor = auth.synthetic_probability > 0.7 ? '#ff8533' : '#ff6b00';
 
     document.getElementById('live-spk-match').textContent = `${spk.match_confidence_pct}%`;
     document.getElementById('live-spk-bar').style.width = `${spk.match_confidence_pct}%`;
-    document.getElementById('live-spk-bar').style.backgroundColor = spk.is_match ? '#10b981' : '#ef4444';
+    document.getElementById('live-spk-bar').style.backgroundColor = spk.is_match ? '#ffffff' : '#ff8533';
 
     document.getElementById('live-exposure-val').textContent = fin.formatted_amount;
     document.getElementById('live-avoided-val').textContent = fin.formatted_avoided_exposure;

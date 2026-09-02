@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css?v=20260903_v3">
 </head>
 <body>
 
@@ -185,7 +185,7 @@
                 </svg>
                 <div class="risk-number-overlay">
                   <div class="score" id="live-gauge-score">0</div>
-                  <div class="tier-label" id="live-gauge-tier" style="color:var(--accent-emerald);">LOW RISK</div>
+                  <div class="tier-label" id="live-gauge-tier" style="color:var(--text-primary);">LOW RISK</div>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
                   <strong id="live-synth-prob">0.0%</strong>
                 </div>
                 <div class="progress-track">
-                  <div id="live-synth-bar" class="progress-fill" style="width:0%; background:#10b981;"></div>
+                  <div id="live-synth-bar" class="progress-fill" style="width:0%; background:#ff6b00;"></div>
                 </div>
               </div>
 
@@ -208,23 +208,23 @@
                   <strong id="live-spk-match">0.0%</strong>
                 </div>
                 <div class="progress-track">
-                  <div id="live-spk-bar" class="progress-fill" style="width:0%; background:#10b981;"></div>
+                  <div id="live-spk-bar" class="progress-fill" style="width:0%; background:#ff6b00;"></div>
                 </div>
               </div>
 
               <div style="background:rgba(0,0,0,0.3); border-radius:6px; padding:0.6rem 0.8rem; margin-top:0.8rem; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; font-size:0.8rem;">
                 <div>
                   <span style="color:var(--text-muted); font-size:0.7rem;">Target Exposure:</span>
-                  <strong id="live-exposure-val" style="display:block; color:#e2e8f0;">₹75,000</strong>
+                  <strong id="live-exposure-val" style="display:block; color:#ffffff;">₹75,000</strong>
                 </div>
                 <div>
                   <span style="color:var(--text-muted); font-size:0.7rem;">Avoided Fraud Loss:</span>
-                  <strong id="live-avoided-val" style="display:block; color:var(--accent-emerald);">₹0</strong>
+                  <strong id="live-avoided-val" style="display:block; color:var(--accent-orange-bright);">₹0</strong>
                 </div>
               </div>
 
               <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-secondary);">
-                Active Action: <strong id="live-action-text" style="color:var(--accent-cyan);">ALLOW_INTERACTION</strong>
+                Active Action: <strong id="live-action-text" style="color:var(--accent-orange-bright);">ALLOW_INTERACTION</strong>
               </div>
             </div>
 

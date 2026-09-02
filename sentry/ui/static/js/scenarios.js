@@ -245,25 +245,33 @@
     container.innerHTML = `
       ${bannerHtml}
       
-      <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem;">
         <div>
-          <span style="font-size:0.75rem; color:var(--text-muted);">Audio File</span>
-          <p style="font-size:0.85rem; font-weight:600; color:#e2e8f0;">${sc.audio_filename} (${data.audio_duration_sec}s)</p>
+          <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Test Sample Audio</span>
+          <p style="font-size:0.88rem; font-weight:600; color:#e2e8f0; margin-top:0.1rem;">${sc.audio_filename} (${data.audio_duration_sec}s)</p>
         </div>
-        <audio controls src="/api/audio/sample/${sc.audio_filename}" style="height:34px;"></audio>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="text-align:right;">
+            <span style="font-size:0.7rem; color:var(--text-muted); display:block;">Ground-Truth Label</span>
+            <span class="badge ${sc.is_synthetic_ground_truth ? 'badge-critical' : 'badge-low'}" style="font-size:0.75rem;">
+              ${sc.is_synthetic_ground_truth ? 'AI SYNTHETIC CLONE (1)' : 'REAL HUMAN VOICE (0)'}
+            </span>
+          </div>
+          <audio controls src="/api/audio/sample/${sc.id}" style="height:36px; outline:none;"></audio>
+        </div>
       </div>
 
       <!-- 4 Intelligence Layer Breakdown Cards -->
       <div class="grid-2" style="margin-bottom:1.25rem;">
         
         <!-- Layer 1: Voice Authenticity -->
-        <div class="glass-card">
+        <div class="glass-card" style="border-left: 3px solid ${auth.synthetic_probability > 0.6 ? '#ef4444' : '#10b981'};">
           <div class="card-header">
             <div class="card-title">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-              Layer 1: Voice Authenticity
+              Layer 1: Voice Authenticity (Retrained Model)
             </div>
-            <span class="badge ${auth.synthetic_probability > 0.7 ? 'badge-critical' : 'badge-low'}">${auth.classification}</span>
+            <span class="badge ${auth.synthetic_probability > 0.6 ? 'badge-critical' : 'badge-low'}">${auth.classification}</span>
           </div>
           <div class="metric-row">
             <div class="metric-header">
@@ -271,8 +279,12 @@
               <strong>${(auth.synthetic_probability * 100).toFixed(1)}%</strong>
             </div>
             <div class="progress-track">
-              <div class="progress-fill" style="width:${auth.synthetic_probability * 100}%; background:${auth.synthetic_probability > 0.7 ? '#ef4444' : '#10b981'};"></div>
+              <div class="progress-fill" style="width:${auth.synthetic_probability * 100}%; background:${auth.synthetic_probability > 0.6 ? '#ef4444' : '#10b981'};"></div>
             </div>
+          </div>
+          <div style="margin-top:0.6rem; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; background:rgba(255,255,255,0.03); padding:0.4rem 0.6rem; border-radius:4px;">
+            <span>Model Confidence Score:</span>
+            <strong style="color:var(--accent-cyan);">${(auth.confidence * 100).toFixed(1)}%</strong>
           </div>
           <div style="font-size:0.78rem; color:var(--text-muted); display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-top:0.6rem;">
             <div>HF Cutoff: <strong style="color:#e2e8f0;">${auth.vocoder_metrics.hf_attenuation_ratio || 'N/A'}</strong></div>

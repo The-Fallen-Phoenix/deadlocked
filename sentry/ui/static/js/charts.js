@@ -1,10 +1,10 @@
 /**
- * Charting & Visualizer Helpers for SENTRY Cyber-Defense Platform
+ * Charting & Visualizer Helpers for SENTRY (Pitch Black & Neon Orange Theme)
  */
 
 const Charts = {
   /**
-   * Updates circular SVG risk gauge with color transitions
+   * Updates circular SVG risk gauge with Neon Orange accent scheme
    */
   updateRiskGauge(circleElement, textElement, score, tier) {
     if (!circleElement || !textElement) return;
@@ -14,14 +14,15 @@ const Charts = {
     const offset = circumference - (score / 100) * circumference;
     circleElement.style.strokeDashoffset = offset;
 
-    let color = '#10b981'; // Green (Low)
-    if (score > 80) color = '#ef4444'; // Crimson (Critical)
-    else if (score > 60) color = '#f97316'; // Orange (High)
-    else if (score > 30) color = '#f59e0b'; // Amber (Moderate)
+    // Black & Neon Orange Theme Palette
+    let color = '#ff8533';
+    if (score > 80) color = '#ffffff';
+    else if (score > 60) color = '#ff8533';
+    else if (score > 30) color = '#ff6b00';
 
     circleElement.style.stroke = color;
     textElement.textContent = Math.round(score);
-    textElement.style.color = color;
+    textElement.style.color = '#ffffff';
   },
 
   /**
@@ -43,7 +44,7 @@ const Charts = {
     ctx.stroke();
 
     // Critical threshold line at 70%
-    ctx.strokeStyle = 'rgba(239, 68, 68, 0.3)';
+    ctx.strokeStyle = 'rgba(255, 107, 0, 0.4)';
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
     const thresholdY = height * (1 - 0.70);
@@ -59,7 +60,7 @@ const Charts = {
       const barH = prob * (height - 10);
       const y = height - barH;
 
-      ctx.fillStyle = prob > 0.65 ? '#ef4444' : (prob > 0.4 ? '#f59e0b' : '#10b981');
+      ctx.fillStyle = prob > 0.65 ? '#ff8533' : (prob > 0.4 ? 'rgba(255, 107, 0, 0.7)' : 'rgba(255, 255, 255, 0.3)');
       ctx.fillRect(x, y, barWidth, barH);
     });
   }

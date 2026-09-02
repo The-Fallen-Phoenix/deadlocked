@@ -1,5 +1,5 @@
 /**
- * Web Audio API Live Microphone Streamer & Visualizer for SENTRY
+ * Web Audio API Live Microphone Streamer & Visualizer (Pitch Black & Neon Orange Theme)
  */
 
 class SentryAudioStreamer {
@@ -103,8 +103,8 @@ class SentryAudioStreamer {
     const render = () => {
       if (!this.isStreaming) {
         ctx.clearRect(0, 0, width, height);
-        // Draw flat idle line
-        ctx.strokeStyle = 'rgba(6, 182, 212, 0.3)';
+        // Draw flat idle line (Neon Orange glow)
+        ctx.strokeStyle = 'rgba(255, 107, 0, 0.4)';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, height / 2);
@@ -116,13 +116,13 @@ class SentryAudioStreamer {
       requestAnimationFrame(render);
       this.analyser.getByteTimeDomainData(dataArray);
 
-      ctx.fillStyle = 'rgba(7, 11, 20, 0.4)';
+      ctx.fillStyle = 'rgba(5, 5, 7, 0.4)';
       ctx.fillRect(0, 0, width, height);
 
       ctx.lineWidth = 2;
-      ctx.strokeStyle = '#06b6d4';
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = '#06b6d4';
+      ctx.strokeStyle = '#ff8533';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#ff6b00';
       ctx.beginPath();
 
       const sliceWidth = width * 1.0 / bufferLength;

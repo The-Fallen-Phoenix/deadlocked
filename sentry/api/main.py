@@ -135,15 +135,33 @@ async def run_scenario(scenario_id: str):
     if not sc:
         raise HTTPException(status_code=404, detail="Scenario not found")
 
-    # Load audio file from sample directory
-    audio_path = settings.sample_audio_dir / sc["audio_filename"]
-    if not audio_path.exists():
-        raise HTTPException(status_code=404, detail=f"Scenario audio file {sc['audio_filename']} not found on disk")
+    # Load audio file from dataset path or sample audio directory
+    audio = None
+    if "audio_filepath" in sc and Path(sc["audio_filepath"]).exists():
+        try:
+            audio, sr = audio_preprocessor.load_audio_from_file(sc["audio_filepath"])
+        except Exception as e:
+            print(f"[!] Exception loading audio_filepath: {e}")
 
-    with open(audio_path, "rb") as f:
-        audio_bytes = f.read()
+    if audio is None:
+        audio_path = settings.sample_audio_dir / sc.get("audio_filename", "")
+        if audio_path.exists():
+            try:
+                audio, sr = audio_preprocessor.load_audio_from_file(audio_path)
+            except Exception:
+                with open(audio_path, "rb") as f:
+                    audio, sr = audio_preprocessor.load_audio_from_bytes(f.read())
 
-    audio, sr = audio_preprocessor.load_audio_from_bytes(audio_bytes)
+    if audio is None:
+        # Procedural speech generator fallback
+        from sentry.audio.synth_generator import scenario_generator
+        is_synth = bool(sc.get("is_synthetic_ground_truth", True))
+        audio = scenario_generator.generate_formant_speech(
+            duration_sec=3.5,
+            base_f0=140.0 if is_synth else 135.0,
+            is_synthetic=is_synth
+        )
+
     session_id = f"SCENARIO-{scenario_id.upper()[:12]}-{int(time.time()*1000)%10000:04d}"
 
     # Execute full pipeline
@@ -348,13 +366,43 @@ async def get_audit_logs(limit: int = Query(50, le=200)):
     return audit_logger.get_recent_events(limit=limit)
 
 
-@app.get("/api/audio/sample/{filename}")
-async def get_sample_audio(filename: str):
-    """Streams a pre-packaged sample audio file."""
-    filepath = settings.sample_audio_dir / filename
-    if not filepath.exists():
-        raise HTTPException(status_code=404, detail="Sample audio not found")
-    return FileResponse(filepath, media_type="audio/wav")
+@app.get("/api/audio/sample/{identifier:path}")
+async def get_sample_audio(identifier: str):
+    """Streams sample audio file for a test scenario or dataset sample."""
+    filepath = None
+    # 1. Try scenario lookup by ID
+    sc = scenario_manager.get_scenario(identifier)
+    if sc and "audio_filepath" in sc and Path(sc["audio_filepath"]).exists():
+        filepath = Path(sc["audio_filepath"])
+
+    # 2. Try sample_audio_dir
+    if not filepath:
+        candidate = settings.sample_audio_dir / identifier
+        if candidate.exists():
+            filepath = candidate
+
+    # 3. Search voice_dataset by path or basename
+    if not filepath:
+        candidate_ds = Path("data/voice_dataset") / identifier
+        if candidate_ds.exists() and candidate_ds.is_file():
+            filepath = candidate_ds
+        else:
+            matches = list(Path("data/voice_dataset").rglob(identifier))
+            if matches:
+                filepath = matches[0]
+
+    if not filepath or not filepath.exists():
+        raise HTTPException(status_code=404, detail=f"Audio file '{identifier}' not found")
+
+    ext = filepath.suffix.lower()
+    if ext == ".mp3":
+        media_type = "audio/mpeg"
+    elif ext in [".m4a", ".mp4"]:
+        media_type = "audio/mp4"
+    else:
+        media_type = "audio/wav"
+
+    return FileResponse(path=str(filepath), media_type=media_type)
 
 
 @app.get("/api/benchmarks")

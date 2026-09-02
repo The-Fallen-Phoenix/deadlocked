@@ -126,9 +126,22 @@ class AuthenticityDetector:
     Ensembles deep neural representations with physical vocoder acoustic signatures.
     """
 
-    def __init__(self):
+    def __init__(self, checkpoint_path: str = "data/models_cache/best_authenticity_model.pt"):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = SentryAcousticClassifier().to(self.device)
+        
+        # Load retrained model checkpoint if available
+        ckpt_file = torch.Path(checkpoint_path) if hasattr(torch, "Path") else None
+        from pathlib import Path
+        ckpt_path = Path(checkpoint_path)
+        if ckpt_path.exists():
+            try:
+                state_dict = torch.load(str(ckpt_path), map_location=self.device)
+                self.model.load_state_dict(state_dict)
+                print(f"[*] AuthenticityDetector successfully loaded trained model checkpoint from {ckpt_path}")
+            except Exception as e:
+                print(f"[!] Warning: Could not load model checkpoint from {ckpt_path}: {e}")
+
         self.model.eval()
 
     def analyze(self, audio: np.ndarray) -> Dict[str, Any]:
@@ -162,13 +175,11 @@ class AuthenticityDetector:
             probs = F.softmax(logits, dim=1).cpu().numpy()[0]
             raw_neural_synth_prob = float(probs[1])
 
-        # 2. Physics-Informed Vocoder Fusion
-        # Synthesizers (ElevenLabs, Bark, HiFi-GAN, VALL-E) leave tell-tale vocoder artifacts
+        # 2. Neural Probabilistic Classification & Vocoder Diagnostic Metrics
+        # Use trained neural feature representation as primary probability source
         vocoder_score = vocoder_metrics["vocoder_artifact_score"]
         
-        # Weighted hybrid ensemble: 60% Neural feature representation + 40% physical vocoder metrics
-        hybrid_synth_prob = 0.60 * raw_neural_synth_prob + 0.40 * vocoder_score
-        hybrid_synth_prob = float(np.clip(hybrid_synth_prob, 0.01, 0.99))
+        hybrid_synth_prob = float(np.clip(raw_neural_synth_prob, 0.001, 0.999))
         genuine_prob = 1.0 - hybrid_synth_prob
 
         # Categorize
