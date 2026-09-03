@@ -296,6 +296,12 @@ body {
   gap: 1.5rem;
 }
 
+.grid-2-1 {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.5rem;
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -309,7 +315,7 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .grid-1-2, .grid-2, .grid-3 {
+  .grid-1-2, .grid-2-1, .grid-2, .grid-3 {
     grid-template-columns: 1fr;
   }
 }
