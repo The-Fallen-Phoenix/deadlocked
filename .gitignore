@@ -35,3 +35,8 @@ data/vault/
 *.pdf
 *.docx
 *.doc
+
+# Loose root-level media files
+SIH 26 IITM.mp4
+df01.mp3
+df09.mp3
