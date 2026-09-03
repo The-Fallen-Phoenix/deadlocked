@@ -69,6 +69,21 @@ class ScenarioManager:
             "attack_type": "None (Legitimate Customer Support)",
             "target_victim": "Account Holder",
             "is_synthetic_ground_truth": False
+        },
+        {
+            "id": "scenario_dataset_test",
+            "title": "Voice Dataset Benchmark Sample",
+            "category": "Dataset Analysis Benchmarking",
+            "description": "Synthetic voice clone sample extracted directly from the test split (UK Male) of the training dataset.",
+            "claimed_speaker_id": None,
+            "claimed_speaker_name": "Unknown Dataset Speaker (UK Male Test Split)",
+            "audio_filename": "dataset_test_synthetic.mp3",
+            "transcript": "(Dataset audio sample playing for forensic analysis)",
+            "transaction_amount_inr": 0.0,
+            "target_beneficiary": "N/A",
+            "attack_type": "Synthetic Voice Generation",
+            "target_victim": "System Evaluator",
+            "is_synthetic_ground_truth": True
         }
     ]
 
