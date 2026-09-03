@@ -39,7 +39,7 @@ jobs:
 
     - name: Install SENTRY Application Dependencies
       run: |
-        pip install numpy scipy fastapi uvicorn websockets pydantic python-multipart scikit-learn requests tqdm pytest httpx
+        pip install -r requirements.txt
 
     - name: Run 27-Test Automated Verification Suite
       run: |
