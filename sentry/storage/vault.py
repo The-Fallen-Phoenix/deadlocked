@@ -121,7 +121,7 @@ class BiometricVault:
                 "id": "spk_rithwik",
                 "name": "Rithwik Sriram",
                 "role": "Team Leader & Project Manager",
-                "filename": "rithwik_executive_enrolled_reference.wav",
+                "filepath": Path("data/voice_dataset/UK/male/1/original.wav"),
                 "f0": 132.0,
                 "org": "Team Deadlocked / IITM"
             },
@@ -129,7 +129,7 @@ class BiometricVault:
                 "id": "spk_sahil",
                 "name": "Sahil Singh",
                 "role": "Backend Lead & Support Rep",
-                "filename": "legitimate_support_genuine.wav",
+                "filepath": Path("data/voice_dataset/UK/male/2/original.wav"),
                 "f0": 135.0,
                 "org": "Deadlocked Banking Ops"
             },
@@ -137,21 +137,27 @@ class BiometricVault:
                 "id": "spk_aarav",
                 "name": "Aarav Sharma",
                 "role": "Enrolled Family Member",
-                "filename": None,
+                "filepath": Path("data/voice_dataset/UK/male/3/original.wav"),
                 "f0": 180.0,
                 "org": "Personal Vault"
+            },
+            {
+                "id": "spk_priya",
+                "name": "Priya Patel",
+                "role": "Chief Financial Officer",
+                "filepath": Path("data/voice_dataset/UK/female/1/original.m4a"),
+                "f0": 210.0,
+                "org": "Executive Board"
             }
         ]
 
         for d in defaults:
             audio = None
-            if d.get("filename"):
-                cand = settings.sample_audio_dir / d["filename"]
-                if cand.exists():
-                    try:
-                        audio, _ = audio_preprocessor.load_audio_from_file(cand)
-                    except Exception:
-                        pass
+            if d.get("filepath") and d["filepath"].exists():
+                try:
+                    audio, _ = audio_preprocessor.load_audio_from_file(d["filepath"])
+                except Exception:
+                    pass
             if audio is None:
                 audio = scenario_generator.generate_formant_speech(
                     duration_sec=4.0,

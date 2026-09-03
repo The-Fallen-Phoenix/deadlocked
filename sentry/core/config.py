@@ -8,12 +8,12 @@ from pydantic import BaseModel
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = BASE_DIR / "data"
-SAMPLE_AUDIO_DIR = DATA_DIR / "sample_audio"
+VOICE_DATASET_DIR = DATA_DIR / "voice_dataset"
 REFERENCE_SPEAKERS_DIR = DATA_DIR / "reference_speakers"
 VAULT_DIR = DATA_DIR / "vault"
 INCIDENTS_DIR = DATA_DIR / "incidents"
 
-for d in [DATA_DIR, SAMPLE_AUDIO_DIR, REFERENCE_SPEAKERS_DIR, VAULT_DIR, INCIDENTS_DIR]:
+for d in [DATA_DIR, VOICE_DATASET_DIR, REFERENCE_SPEAKERS_DIR, VAULT_DIR, INCIDENTS_DIR]:
     os.makedirs(d, exist_ok=True)
 
 
@@ -68,7 +68,8 @@ class AppSettings(BaseModel):
 
     # Paths
     data_dir: Path = DATA_DIR
-    sample_audio_dir: Path = SAMPLE_AUDIO_DIR
+    voice_dataset_dir: Path = VOICE_DATASET_DIR
+    sample_audio_dir: Path = VOICE_DATASET_DIR
     reference_speakers_dir: Path = REFERENCE_SPEAKERS_DIR
     vault_dir: Path = VAULT_DIR
     incidents_dir: Path = INCIDENTS_DIR

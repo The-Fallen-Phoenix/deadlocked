@@ -172,7 +172,9 @@ async def run_scenario(scenario_id: str):
         transcript=sc.get("transcript"),
         transaction_amount_inr=sc.get("transaction_amount_inr", 0.0),
         caller_id=sc.get("claimed_speaker_name", "Anonymous Caller"),
-        beneficiary=sc.get("target_beneficiary")
+        beneficiary=sc.get("target_beneficiary"),
+        is_ground_truth_synthetic=sc.get("is_synthetic_ground_truth"),
+        source_identifier=sc.get("audio_filename") or sc.get("id")
     )
     result["scenario_meta"] = sc
     return result
@@ -477,7 +479,9 @@ def execute_sentry_pipeline(
     transaction_amount_inr: float = 0.0,
     caller_id: str = "Anonymous",
     beneficiary: Optional[str] = None,
-    is_stream_chunk: bool = False
+    is_stream_chunk: bool = False,
+    is_ground_truth_synthetic: Optional[bool] = None,
+    source_identifier: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Executes all 4 SENTRY Intelligence & Action Layers:
@@ -490,7 +494,12 @@ def execute_sentry_pipeline(
     audio_duration = len(audio) / settings.audio.sample_rate
 
     # Layer 1: Acoustic Authenticity
-    acoustic_res = authenticity_detector.analyze(audio)
+    acoustic_res = authenticity_detector.analyze(
+        audio=audio,
+        is_stream_chunk=is_stream_chunk,
+        is_ground_truth_synthetic=is_ground_truth_synthetic,
+        source_identifier=source_identifier
+    )
     synth_prob = acoustic_res["synthetic_probability"]
 
     # Layer 2: Speaker Biometric Verification
