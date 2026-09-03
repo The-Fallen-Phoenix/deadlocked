@@ -1,232 +1,58 @@
 /**
  * Attack Scenario Studio & Test Bench for SENTRY
- * Pre-populated with real-world AI voice clones and genuine human voice samples
- * from the held-out 20% test split of data/voice_dataset.
  */
 const Scenarios = {
   DEFAULT_SCENARIOS: [
     {
-      "id": "scenario_ds_UK_male_4_synthetic_1",
-      "title": "UK Male Speaker #4 — AI Voice Clone (synthetic_1)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_4",
-      "claimed_speaker_name": "Speaker UK Male #4",
-      "audio_filename": "synthetic_1.mp3",
-      "transcript": "Emergency request: Please process ₹150,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 150000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
+      "id": "scenario_ceo_wire_transfer",
+      "title": "CEO Urgent Wire Transfer Scam",
+      "category": "Corporate Executive Impersonation",
+      "description": "Deepfake voice clone of the Team Leader/CEO demanding an emergency ₹5 Lakh wire transfer to an unknown vendor account.",
+      "claimed_speaker_id": "spk_rithwik",
+      "claimed_speaker_name": "Rithwik Sriram (Executive Profile)",
+      "transcript": "Sahil, this is Rithwik. I am in an urgent closed-door board meeting right now. We need an immediate wire transfer of ₹5,00,000 to this vendor account to secure the contract before 2 PM. Do not delay, process it right away!",
+      "transaction_amount_inr": 500000.0,
+      "target_beneficiary": "Acme Ventures Holdings (Unregistered Payee)",
+      "attack_type": "AI Voice Cloning + Executive Authority Impersonation",
       "is_synthetic_ground_truth": true
     },
     {
-      "id": "scenario_ds_UK_female_1_synthetic_2",
-      "title": "UK Female Speaker #1 — AI Voice Clone (synthetic_2)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_1",
-      "claimed_speaker_name": "Speaker UK Female #1",
-      "audio_filename": "synthetic_2.mp3",
-      "transcript": "Emergency request: Please process ₹200,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 200000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_4_synthetic_2",
-      "title": "UK Female Speaker #4 — AI Voice Clone (synthetic_2)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_4",
-      "claimed_speaker_name": "Speaker UK Female #4",
-      "audio_filename": "synthetic_2.mp3",
-      "transcript": "Emergency request: Please process ₹250,000 immediately to our escrow account before 2 PM.",
+      "id": "scenario_digital_arrest_police",
+      "title": "Digital Arrest & Police Coercion Scam",
+      "category": "Authority Extortion & Social Engineering",
+      "description": "Fraudulent caller using synthetic speech claiming to be a CBI officer threatening digital arrest unless ₹2.5 Lakh is sent to a fake judicial escrow.",
+      "claimed_speaker_id": null,
+      "claimed_speaker_name": "Inspector Verma (Claimed Official)",
+      "transcript": "This is Inspector Verma from CBI Cyber Cell Headquarters. An arrest warrant has been issued in your name for money laundering. You are under digital arrest. Transfer ₹2,50,000 immediately to the judicial escrow account or police will raid your premises within 30 minutes. Do not disconnect!",
       "transaction_amount_inr": 250000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
+      "target_beneficiary": "Judicial Escrow Cyber Cell (Fraudulent Account)",
+      "attack_type": "Digital Arrest + Legal Coercion Extortion",
       "is_synthetic_ground_truth": true
     },
     {
-      "id": "scenario_ds_UK_female_4_synthetic_1",
-      "title": "UK Female Speaker #4 — AI Voice Clone (synthetic_1)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_4",
-      "claimed_speaker_name": "Speaker UK Female #4",
-      "audio_filename": "synthetic_1.mp3",
-      "transcript": "Emergency request: Please process ₹300,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 300000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
+      "id": "scenario_grandchild_emergency",
+      "title": "Grandchild Emergency ICU Scam",
+      "category": "Family Impersonation Extortion",
+      "description": "AI-generated voice clone of a grandchild claiming to be in a hospital accident demanding an immediate ₹75,000 emergency deposit.",
+      "claimed_speaker_id": "spk_aarav",
+      "claimed_speaker_name": "Aarav Sharma (Enrolled Grandchild)",
+      "transcript": "Grandpa, please help me! I was in a terrible road accident and the hospital doctor needs an immediate emergency ICU deposit of ₹75,000 right now. Please approve the UPI transfer immediately, my phone is dying!",
+      "transaction_amount_inr": 75000.0,
+      "target_beneficiary": "City Care Emergency Clinic (Unverified UPI VPA)",
+      "attack_type": "Family Voice Clone + Urgent Medical Distress",
       "is_synthetic_ground_truth": true
     },
     {
-      "id": "scenario_ds_UK_male_3_synthetic_3",
-      "title": "UK Male Speaker #3 — AI Voice Clone (synthetic_3)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_3",
-      "claimed_speaker_name": "Speaker UK Male #3",
-      "audio_filename": "synthetic_3.mp3",
-      "transcript": "Emergency request: Please process ₹350,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 350000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_1_synthetic_3",
-      "title": "UK Female Speaker #1 — AI Voice Clone (synthetic_3)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_1",
-      "claimed_speaker_name": "Speaker UK Female #1",
-      "audio_filename": "synthetic_3.mp3",
-      "transcript": "Emergency request: Please process ₹150,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 150000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_4_synthetic_3",
-      "title": "UK Female Speaker #4 — AI Voice Clone (synthetic_3)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_4",
-      "claimed_speaker_name": "Speaker UK Female #4",
-      "audio_filename": "synthetic_3.mp3",
-      "transcript": "Emergency request: Please process ₹200,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 200000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_male_4_synthetic_2",
-      "title": "UK Male Speaker #4 — AI Voice Clone (synthetic_2)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_4",
-      "claimed_speaker_name": "Speaker UK Male #4",
-      "audio_filename": "synthetic_2.mp3",
-      "transcript": "Emergency request: Please process ₹250,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 250000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_1_synthetic_1",
-      "title": "UK Female Speaker #1 — AI Voice Clone (synthetic_1)",
-      "category": "Test Split | UK Female Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_female_1",
-      "claimed_speaker_name": "Speaker UK Female #1",
-      "audio_filename": "synthetic_1.mp3",
-      "transcript": "Emergency request: Please process ₹300,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 300000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_male_3_synthetic_2",
-      "title": "UK Male Speaker #3 — AI Voice Clone (synthetic_2)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_3",
-      "claimed_speaker_name": "Speaker UK Male #3",
-      "audio_filename": "synthetic_2.mp3",
-      "transcript": "Emergency request: Please process ₹350,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 350000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_4_original",
-      "title": "UK Female Speaker #4 — Authentic Human Voice",
-      "category": "Test Split | UK Female Genuine Baseline",
-      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
-      "claimed_speaker_id": "spk_uk_female_4",
-      "claimed_speaker_name": "Speaker UK Female #4",
-      "audio_filename": "original.m4a",
-      "transcript": "Good morning, this is authentic human speech from test speaker #4. No transaction required.",
+      "id": "scenario_legitimate_bank_support",
+      "title": "Legitimate Bank Support Verification",
+      "category": "Normal Banking Interaction",
+      "description": "Legitimate support representative with natural acoustic human vocal tract and verified enrolled voice biometric profile.",
+      "claimed_speaker_id": "spk_sahil",
+      "claimed_speaker_name": "Sahil Singh (Enrolled Support Officer)",
+      "transcript": "Good morning, this is Sahil from support. I am calling to follow up on your ticket regarding the recent statement query. There are no fees or transactions required, just confirming your request has been resolved.",
       "transaction_amount_inr": 0.0,
       "target_beneficiary": null,
-      "attack_type": "Legitimate Customer Verification",
-      "is_synthetic_ground_truth": false
-    },
-    {
-      "id": "scenario_ds_UK_male_3_original",
-      "title": "UK Male Speaker #3 — Authentic Human Voice",
-      "category": "Test Split | UK Male Genuine Baseline",
-      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
-      "claimed_speaker_id": "spk_uk_male_3",
-      "claimed_speaker_name": "Speaker UK Male #3",
-      "audio_filename": "original.wav",
-      "transcript": "Good morning, this is authentic human speech from test speaker #3. No transaction required.",
-      "transaction_amount_inr": 0.0,
-      "target_beneficiary": null,
-      "attack_type": "Legitimate Customer Verification",
-      "is_synthetic_ground_truth": false
-    },
-    {
-      "id": "scenario_ds_UK_male_3_synthetic_1",
-      "title": "UK Male Speaker #3 — AI Voice Clone (synthetic_1)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_3",
-      "claimed_speaker_name": "Speaker UK Male #3",
-      "audio_filename": "synthetic_1.mp3",
-      "transcript": "Emergency request: Please process ₹250,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 250000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_male_4_synthetic_3",
-      "title": "UK Male Speaker #4 — AI Voice Clone (synthetic_3)",
-      "category": "Test Split | UK Male Cloned Vector",
-      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
-      "claimed_speaker_id": "spk_uk_male_4",
-      "claimed_speaker_name": "Speaker UK Male #4",
-      "audio_filename": "synthetic_3.mp3",
-      "transcript": "Emergency request: Please process ₹300,000 immediately to our escrow account before 2 PM.",
-      "transaction_amount_inr": 300000.0,
-      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
-      "attack_type": "AI Voice Cloning + Coercion Extortion",
-      "is_synthetic_ground_truth": true
-    },
-    {
-      "id": "scenario_ds_UK_female_1_original",
-      "title": "UK Female Speaker #1 — Authentic Human Voice",
-      "category": "Test Split | UK Female Genuine Baseline",
-      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
-      "claimed_speaker_id": "spk_uk_female_1",
-      "claimed_speaker_name": "Speaker UK Female #1",
-      "audio_filename": "original.m4a",
-      "transcript": "Good morning, this is authentic human speech from test speaker #1. No transaction required.",
-      "transaction_amount_inr": 0.0,
-      "target_beneficiary": null,
-      "attack_type": "Legitimate Customer Verification",
-      "is_synthetic_ground_truth": false
-    },
-    {
-      "id": "scenario_ds_UK_male_4_original",
-      "title": "UK Male Speaker #4 — Authentic Human Voice",
-      "category": "Test Split | UK Male Genuine Baseline",
-      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
-      "claimed_speaker_id": "spk_uk_male_4",
-      "claimed_speaker_name": "Speaker UK Male #4",
-      "audio_filename": "original.wav",
-      "transcript": "Good morning, this is authentic human speech from test speaker #4. No transaction required.",
-      "transaction_amount_inr": 0.0,
-      "target_beneficiary": null,
-      "attack_type": "Legitimate Customer Verification",
+      "attack_type": "None (Legitimate Customer Support)",
       "is_synthetic_ground_truth": false
     }
   ],
@@ -239,25 +65,20 @@ const Scenarios = {
     try {
       const res = await fetch('/api/scenarios');
       if (res.ok) {
-        const fetched = await res.json();
-        if (Array.isArray(fetched) && fetched.length > 0) {
-          scenarios = fetched;
-        }
+        scenarios = await res.json();
       }
     } catch (e) {
-      console.log('Using embedded dataset scenarios for static deployment');
+      console.log('Using embedded scenarios for static deployment');
     }
-
-    this.scenariosList = scenarios;
 
     container.innerHTML = scenarios.map(sc => `
       <div class="scenario-card" onclick="Scenarios.selectScenario('${sc.id}')" id="card-${sc.id}">
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
             <span class="badge ${sc.is_synthetic_ground_truth ? 'badge-critical' : 'badge-low'}">
-              ${sc.is_synthetic_ground_truth ? 'AI Synthetic Clone' : 'Genuine Human Voice'}
+              ${sc.is_synthetic_ground_truth ? 'AI Attack Vector' : 'Genuine Baseline'}
             </span>
-            <span style="font-size:0.75rem; color:var(--text-muted);">${sc.category || ''}</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">${sc.category}</span>
           </div>
           <h3>${sc.title}</h3>
           <p>${sc.description}</p>
@@ -265,7 +86,7 @@ const Scenarios = {
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:0.6rem; margin-top:0.4rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <span style="font-size:0.7rem; color:var(--text-muted); display:block;">Amount / Exposure</span>
-            <strong style="color:var(--accent-cyan); font-size:0.9rem;">₹${(sc.transaction_amount_inr || 0).toLocaleString()}</strong>
+            <strong style="color:var(--accent-cyan); font-size:0.9rem;">₹${sc.transaction_amount_inr.toLocaleString()}</strong>
           </div>
           <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); Scenarios.runScenario('${sc.id}')">
             Execute Attack Test
@@ -274,7 +95,7 @@ const Scenarios = {
       </div>
     `).join('');
 
-    // Auto-select and preview first scenario
+    // Auto-select first scenario
     if (scenarios.length > 0) {
       this.selectScenario(scenarios[0].id);
     }
@@ -285,24 +106,17 @@ const Scenarios = {
     document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
     const card = document.getElementById(`card-${scenarioId}`);
     if (card) card.classList.add('active');
-
-    // Run preview automatically for selected scenario
-    this.runScenario(scenarioId);
   },
 
   async runScenario(scenarioId) {
-    this.activeScenarioId = scenarioId;
-    document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
-    const card = document.getElementById(`card-${scenarioId}`);
-    if (card) card.classList.add('active');
-
+    this.selectScenario(scenarioId);
     const resultBox = document.getElementById('scenario-result-view');
     if (!resultBox) return;
 
     resultBox.innerHTML = `
       <div style="text-align:center; padding:3rem 1rem;">
         <div class="pulse-dot" style="margin:0 auto 1rem; width:16px; height:16px;"></div>
-        <p style="color:var(--text-secondary);">Streaming audio sample through SENTRY 4-Layer Neural Pipeline...</p>
+        <p style="color:var(--text-secondary);">Streaming audio through SENTRY 4-Layer Neural Pipeline...</p>
       </div>
     `;
 
@@ -314,25 +128,125 @@ const Scenarios = {
         return;
       }
     } catch (e) {
-      console.log('Running client-side pipeline simulation for scenario execution');
+      console.log('Running static simulation mode for scenario execution');
     }
 
-    // Client-side fallback simulation
+    // Client-side fallback simulation for GitHub Pages / Static Hosting
     setTimeout(() => {
-      const scList = this.scenariosList || this.DEFAULT_SCENARIOS;
-      const sc = scList.find(s => s.id === scenarioId) || scList[0];
+      const sc = this.DEFAULT_SCENARIOS.find(s => s.id === scenarioId) || this.DEFAULT_SCENARIOS[0];
       const isSynth = sc.is_synthetic_ground_truth;
-      const amount = sc.transaction_amount_inr || 0;
+      const amount = sc.transaction_amount_inr;
 
-      const synthProb = isSynth ? (0.88 + (Math.abs(hashCode(scenarioId)) % 10) * 0.01) : 0.04;
+      const synthProb = isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.94 : (scenarioId === 'scenario_grandchild_emergency' ? 0.91 : 0.88)) : 0.04;
       const spkRisk = isSynth ? 0.85 : 0.02;
-      const behScore = isSynth ? 0.82 : 0.05;
+      const behScore = isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.92 : (scenarioId === 'scenario_grandchild_emergency' ? 0.84 : 0.78)) : 0.05;
 
       const expFactor = amount > 0 ? Math.min(1.0, Math.max(0.05, (Math.log10(Math.max(amount, 100)) - 2.0) / 4.0)) : 0.05;
       let rawScore = (0.35 * synthProb + 0.25 * spkRisk + 0.15 * expFactor + 0.15 * behScore + 0.10 * 0.10) * 100.0;
       if (isSynth) rawScore = Math.max(rawScore, 84.5);
       const tier = rawScore <= 25 ? 'LOW' : (rawScore <= 50 ? 'MODERATE' : (rawScore <= 75 ? 'HIGH' : 'CRITICAL'));
-      const tierColor = tier === 'LOW' ? '#10B981' : (tier === 'MODERATE' ? '#F59E0B' : (tier === 'HIGH' ? '#EF5350' : '#DC2626'));
+      const actionCode = tier === 'LOW' ? 'ALLOW' : (tier === 'MODERATE' ? 'ALERT' : (tier === 'HIGH' ? 'DYNAMIC_CHALLENGE' : 'TRANSACTION_FREEZE'));
+
+      const mockResult = {
+        session_id: `SCENARIO-${scenarioId.toUpperCase().slice(0, 10)}-STATIC`,
+        latency_ms: 14.2,
+        audio_duration_sec: 4.5,
+        scenario_meta: sc,
+        authenticity: {
+          synthetic_probability: synthProb,
+          confidence_pct: roundVal(synthProb * 100, 1),
+          classification: isSynth ? 'SYNTHETIC_CLONE' : 'GENUINE_VOICE',
+          verdict: isSynth ? 'SYNTHETIC_VOICE_CLONE' : 'AUTHENTIC_HUMAN_VOICE',
+          vocoder_metrics: {
+            hf_attenuation_ratio: isSynth ? 0.89 : 0.18,
+            spectral_flux: isSynth ? 0.042 : 0.185,
+            pitch_jitter: isSynth ? 0.003 : 0.016,
+            amplitude_shimmer: isSynth ? 0.009 : 0.038,
+            vocoder_artifact_score: isSynth ? 0.84 : 0.12
+          }
+        },
+        speaker_verification: {
+          claimed_speaker: sc.claimed_speaker_name,
+          verification_status: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 'UNENROLLED' : 'MATCH_CONFIRMED') : 'MATCH_CONFIRMED',
+          is_match: !isSynth,
+          cosine_similarity: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.0 : 0.94) : 1.0,
+          match_confidence_pct: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.0 : 94.9) : 100.0,
+          speaker_mismatch_risk: spkRisk,
+          description: isSynth ? 'Voice biometric signature diverged significantly from enrolled voiceprint or matched cloned victim profile.' : 'Biometric acoustic embeddings match enrolled voiceprint profile.'
+        },
+        threat_intelligence: {
+          behavioral_threat_score: behScore,
+          threat_level: isSynth ? 'HIGH_COERCION' : 'NORMAL_INTERACTION',
+          is_coercive_threat: isSynth,
+          text_analysis: {
+            threat_level: isSynth ? (scenarioId === 'scenario_digital_arrest_police' || scenarioId === 'scenario_grandchild_emergency' ? 'CRITICAL_ATTACK' : 'ELEVATED') : 'CLEAN',
+            detected_phrases: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? ['arrest warrant', 'digital arrest', 'judicial escrow'] : (scenarioId === 'scenario_grandchild_emergency' ? ['road accident', 'emergency ICU', 'hospital doctor'] : ['urgent closed-door board meeting', 'immediate wire transfer', 'secure the contract'])) : []
+          },
+          detected_intents: isSynth ? ['URGENT_DEMAND', 'UNAUTHORIZED_ESCROW', 'DIGITAL_COERCION'] : ['INFORMATIONAL_SUPPORT'],
+          cadence_anomaly: isSynth ? 'High Artificial Stress & Cadence Flux' : 'Natural Human Speech Prosody'
+        },
+        risk_evaluation: {
+          overall_risk_score: roundVal(rawScore, 1),
+          risk_tier: tier,
+          tier_color: tier === 'CRITICAL' ? '#DC2626' : (tier === 'HIGH' ? '#EF5350' : (tier === 'MODERATE' ? '#F59E0B' : '#10B981')),
+          action_code: actionCode,
+          recommendation: isSynth ? 'IMMEDIATE ACTION: Transaction frozen and alerted SOC.' : 'Interaction authenticated. Proceed normally.',
+          contributors_percentage: {
+            synthetic_voice: roundVal((0.35 * synthProb / (rawScore/100)) * 100, 1),
+            speaker_mismatch: roundVal((0.25 * spkRisk / (rawScore/100)) * 100, 1),
+            transaction_exposure: roundVal((0.15 * expFactor / (rawScore/100)) * 100, 1),
+            behavioral_threat: roundVal((0.15 * behScore / (rawScore/100)) * 100, 1),
+            context_anomaly: roundVal((0.10 * 0.10 / (rawScore/100)) * 100, 1)
+          }
+        },
+        financial_exposure: {
+          transaction_amount_inr: amount,
+          formatted_amount: `₹${amount.toLocaleString()}`,
+          formatted_avoided_exposure: isSynth ? `₹${amount.toLocaleString()}` : '₹0',
+          expected_loss_inr: Math.round(amount * (rawScore / 100)),
+          avoided_loss_inr: isSynth ? amount : 0,
+          exposure_tier: amount >= 500000 ? 'VERY_HIGH' : (amount >= 100000 ? 'HIGH' : 'STANDARD')
+        },
+        prevention_action: {
+          prevention_action: isSynth ? 'AUTOMATED_TRANSACTION_HOLD' : 'ALLOW_INTERACTION',
+          action: isSynth ? 'TRANSACTION_HELD_FOR_REVIEW' : 'ALLOW_TRANSACTION',
+          policy_triggered: isSynth ? 'POLICY_RULE_IMMEDIATE_INTERCEPT' : 'POLICY_RULE_AUTO_APPROVE',
+          notification_banner: isSynth ? {
+            severity: 'CRITICAL',
+            title: '🚨 SENTRY ACTIVE DEFENSE: Transaction Frozen',
+            message: `Automated freeze triggered for ₹${amount.toLocaleString()}. Synthetic probability: ${(synthProb*100).toFixed(1)}%. Incident dossier logged.`
+          } : {
+            severity: 'LOW',
+            title: '✅ SENTRY TRUST ENGINE: Verified Authentic',
+            message: 'All 4 intelligence layers authenticated successfully. No risk indicators detected.'
+          }
+        }
+      };
+
+      this.renderScenarioResult(resultBox, mockResult);
+    }, 400);
+  },
+
+  renderScenarioResult(container, data) {
+    const sc = data.scenario_meta || {};
+    const auth = data.authenticity || {};
+    const spk = data.speaker_verification || {};
+    const threat = data.threat_intelligence || {};
+    const risk = data.risk_evaluation || {};
+    const fin = data.financial_exposure || {};
+    const prev = data.prevention_action || {};
+
+    const vocoder = auth.vocoder_metrics || auth.vocoder_artifacts || {};
+    const textAnalysis = threat.text_analysis || {};
+    const threatLevel = textAnalysis.threat_level || threat.threat_level || (threat.is_coercive_threat ? 'HIGH_COERCION' : 'NORMAL');
+    const detectedPhrases = textAnalysis.detected_phrases || threat.detected_intents || [];
+    const tierColor = risk.tier_color || risk.color_indicator || (risk.overall_risk_score > 75 ? '#DC2626' : (risk.overall_risk_score > 50 ? '#EF5350' : '#10B981'));
+    const prevAction = prev.prevention_action || prev.action || (risk.overall_risk_score > 60 ? 'AUTOMATED_TRANSACTION_HOLD' : 'ALLOW_INTERACTION');
+
+    let bannerHtml = '';
+    if (prev.notification_banner) {
+      bannerHtml = `
+        <div class="prevention-banner ${prev.notification_banner.severity || 'CRITICAL'}">
           <svg style="width:24px; height:24px; flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
           </svg>
@@ -477,15 +391,6 @@ const Scenarios = {
     `;
   }
 };
-
-function hashCode(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return hash;
-}
 
 function roundVal(val, dec = 1) {
   return parseFloat(Number(val).toFixed(dec));
