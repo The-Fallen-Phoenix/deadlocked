@@ -11,6 +11,8 @@ const Scenarios = {
       "claimed_speaker_id": "spk_uk_male_4",
       "claimed_speaker_name": "Speaker UK Male #4",
       "audio_filename": "synthetic_1.mp3",
+      "audio_url": "audio/synthetic_1.mp3",
+      "audio_duration_sec": 5.5,
       "transcript": "Emergency request: Please process ₹250,000 immediately to our escrow account before 2 PM.",
       "transaction_amount_inr": 250000.0,
       "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
@@ -25,6 +27,8 @@ const Scenarios = {
       "claimed_speaker_id": "spk_uk_female_1",
       "claimed_speaker_name": "Speaker UK Female #1",
       "audio_filename": "synthetic_2.mp3",
+      "audio_url": "audio/synthetic_2.mp3",
+      "audio_duration_sec": 4.8,
       "transcript": "Urgent security notice: Immediate ₹300,000 wire required to verify bank routing clearance.",
       "transaction_amount_inr": 300000.0,
       "target_beneficiary": "Offshore Clearing Escrow (Fraudulent Account)",
@@ -39,6 +43,8 @@ const Scenarios = {
       "claimed_speaker_id": "spk_uk_female_4",
       "claimed_speaker_name": "Speaker UK Female #4",
       "audio_filename": "original.m4a",
+      "audio_url": "audio/original.m4a",
+      "audio_duration_sec": 5.2,
       "transcript": "Good morning, this is authentic human speech from test speaker #4. No transaction required.",
       "transaction_amount_inr": 0.0,
       "target_beneficiary": null,
@@ -53,6 +59,8 @@ const Scenarios = {
       "claimed_speaker_id": "spk_uk_male_3",
       "claimed_speaker_name": "Speaker UK Male #3",
       "audio_filename": "original.wav",
+      "audio_url": "audio/original.wav",
+      "audio_duration_sec": 5.5,
       "transcript": "Good morning, this is authentic human speech from test speaker #3. No transaction required.",
       "transaction_amount_inr": 0.0,
       "target_beneficiary": null,
@@ -66,6 +74,9 @@ const Scenarios = {
       "description": "Deepfake voice clone of the Team Leader/CEO demanding an emergency ₹5 Lakh wire transfer to an unknown vendor account.",
       "claimed_speaker_id": "spk_rithwik",
       "claimed_speaker_name": "Rithwik Sriram (Executive Profile)",
+      "audio_filename": "ceo_wire_transfer.mp3",
+      "audio_url": "audio/ceo_wire_transfer.mp3",
+      "audio_duration_sec": 5.5,
       "transcript": "Sahil, this is Rithwik. I am in an urgent closed-door board meeting right now. We need an immediate wire transfer of ₹5,00,000 to this vendor account to secure the contract before 2 PM. Do not delay, process it right away!",
       "transaction_amount_inr": 500000.0,
       "target_beneficiary": "Acme Ventures Holdings (Unregistered Payee)",
@@ -79,10 +90,29 @@ const Scenarios = {
       "description": "Fraudulent caller using synthetic speech claiming to be a CBI officer threatening digital arrest unless ₹2.5 Lakh is sent to a fake judicial escrow.",
       "claimed_speaker_id": null,
       "claimed_speaker_name": "Inspector Verma (Claimed Official)",
+      "audio_filename": "digital_arrest_police.mp3",
+      "audio_url": "audio/digital_arrest_police.mp3",
+      "audio_duration_sec": 5.5,
       "transcript": "This is Inspector Verma from CBI Cyber Cell Headquarters. An arrest warrant has been issued in your name for money laundering. You are under digital arrest. Transfer ₹2,50,000 immediately to the judicial escrow account or police will raid your premises within 30 minutes. Do not disconnect!",
       "transaction_amount_inr": 250000.0,
       "target_beneficiary": "Judicial Escrow Cyber Cell (Fraudulent Account)",
       "attack_type": "Digital Arrest + Legal Coercion Extortion",
+      "is_synthetic_ground_truth": true
+    },
+    {
+      "id": "scenario_grandchild_emergency",
+      "title": "Grandchild Emergency ICU Scam",
+      "category": "Family Impersonation Extortion",
+      "description": "AI-generated voice clone of a grandchild claiming to be in a hospital accident demanding an immediate ₹75,000 emergency deposit.",
+      "claimed_speaker_id": "spk_aarav",
+      "claimed_speaker_name": "Aarav Sharma (Enrolled Grandchild)",
+      "audio_filename": "grandchild_emergency.mp3",
+      "audio_url": "audio/grandchild_emergency.mp3",
+      "audio_duration_sec": 4.8,
+      "transcript": "Grandpa, please help me! I was in a terrible road accident and the hospital doctor needs an immediate emergency ICU deposit of ₹75,000 right now. Please approve the UPI transfer immediately, my phone is dying!",
+      "transaction_amount_inr": 75000.0,
+      "target_beneficiary": "City Care Emergency Clinic (Unverified UPI VPA)",
+      "attack_type": "Family Voice Clone + Urgent Medical Distress",
       "is_synthetic_ground_truth": true
     },
     {
@@ -92,6 +122,9 @@ const Scenarios = {
       "description": "Legitimate support representative with natural acoustic human vocal tract and verified enrolled voice biometric profile.",
       "claimed_speaker_id": "spk_sahil",
       "claimed_speaker_name": "Sahil Singh (Enrolled Support Officer)",
+      "audio_filename": "legitimate_bank_support.wav",
+      "audio_url": "audio/legitimate_bank_support.wav",
+      "audio_duration_sec": 5.5,
       "transcript": "Good morning, this is Sahil from support. I am calling to follow up on your ticket regarding the recent statement query. There are no fees or transactions required, just confirming your request has been resolved.",
       "transaction_amount_inr": 0.0,
       "target_beneficiary": null,
@@ -178,22 +211,186 @@ const Scenarios = {
     setTimeout(() => {
       const sc = this.DEFAULT_SCENARIOS.find(s => s.id === scenarioId) || this.DEFAULT_SCENARIOS[0];
       const isSynth = sc.is_synthetic_ground_truth;
-      const amount = sc.transaction_amount_inr;
+      const amount = sc.transaction_amount_inr || 0.0;
 
-      const synthProb = isSynth ? 0.935 : 0.05;
-      const spkRisk = isSynth ? 0.85 : 0.02;
-      const behScore = isSynth ? (amount >= 250000 ? 0.88 : 0.76) : 0.05;
+      const SCENARIO_PROFILES = {
+        'scenario_ds_UK_male_4_synthetic_1': {
+          synthProb: 0.942,
+          hfAttenuation: 0.88,
+          pitchJitter: 0.0031,
+          spectralFlux: 0.038,
+          vocoderScore: 0.86,
+          spkStatus: 'UNENROLLED_CLONE',
+          isMatch: false,
+          spkCosine: 0.32,
+          spkMatchPct: 32.0,
+          spkRisk: 0.82,
+          threatScore: 0.72,
+          threatLevel: 'HIGH_COERCION',
+          phrases: ['emergency request', 'process ₹250,000 immediately', 'escrow account before 2 PM'],
+          intents: ['URGENT_DEMAND', 'UNVERIFIED_ESCROW'],
+          cadence: 'Neural Vocoder Phase Inconsistency & Glottal Flattening',
+          overallRisk: 89.2,
+          tier: 'CRITICAL',
+          actionCode: 'TRANSACTION_FREEZE'
+        },
+        'scenario_ds_UK_female_1_synthetic_2': {
+          synthProb: 0.928,
+          hfAttenuation: 0.85,
+          pitchJitter: 0.0034,
+          spectralFlux: 0.041,
+          vocoderScore: 0.84,
+          spkStatus: 'UNENROLLED_CLONE',
+          isMatch: false,
+          spkCosine: 0.28,
+          spkMatchPct: 28.5,
+          spkRisk: 0.85,
+          threatScore: 0.76,
+          threatLevel: 'ELEVATED_FINANCIAL_FRAUD',
+          phrases: ['urgent security notice', 'immediate ₹300,000 wire', 'bank routing clearance'],
+          intents: ['FINANCIAL_EXTORTION', 'OFFSHORE_CLEARING'],
+          cadence: 'Artificial High-Frequency Spectral Attenuation',
+          overallRisk: 87.8,
+          tier: 'CRITICAL',
+          actionCode: 'TRANSACTION_FREEZE'
+        },
+        'scenario_ds_UK_female_4_original': {
+          synthProb: 0.048,
+          hfAttenuation: 0.18,
+          pitchJitter: 0.019,
+          spectralFlux: 0.182,
+          vocoderScore: 0.13,
+          spkStatus: 'MATCH_CONFIRMED',
+          isMatch: true,
+          spkCosine: 0.965,
+          spkMatchPct: 96.5,
+          spkRisk: 0.03,
+          threatScore: 0.05,
+          threatLevel: 'CLEAN',
+          phrases: [],
+          intents: ['AUTHENTIC_VERIFICATION'],
+          cadence: 'Natural Human Vocal Resonance & Jitter',
+          overallRisk: 8.4,
+          tier: 'LOW',
+          actionCode: 'ALLOW'
+        },
+        'scenario_ds_UK_male_3_original': {
+          synthProb: 0.058,
+          hfAttenuation: 0.16,
+          pitchJitter: 0.022,
+          spectralFlux: 0.175,
+          vocoderScore: 0.11,
+          spkStatus: 'MATCH_CONFIRMED',
+          isMatch: true,
+          spkCosine: 0.981,
+          spkMatchPct: 98.1,
+          spkRisk: 0.02,
+          threatScore: 0.04,
+          threatLevel: 'CLEAN',
+          phrases: [],
+          intents: ['AUTHENTIC_VERIFICATION'],
+          cadence: 'Natural Human Vocal Formants & Prosody',
+          overallRisk: 7.2,
+          tier: 'LOW',
+          actionCode: 'ALLOW'
+        },
+        'scenario_ceo_wire_transfer': {
+          synthProb: 0.954,
+          hfAttenuation: 0.91,
+          pitchJitter: 0.0023,
+          spectralFlux: 0.035,
+          vocoderScore: 0.92,
+          spkStatus: 'MATCH_CONFIRMED',
+          isMatch: false,
+          spkCosine: 0.949,
+          spkMatchPct: 94.9,
+          spkRisk: 0.88,
+          threatScore: 0.88,
+          threatLevel: 'CRITICAL_ATTACK',
+          phrases: ['urgent closed-door board meeting', 'immediate wire transfer of ₹5,00,000', 'secure the contract before 2 PM'],
+          intents: ['EXECUTIVE_IMPERSONATION', 'URGENT_WIRE_DEMAND'],
+          cadence: 'High Synthetic Stress & Pitch Flatness',
+          overallRisk: 94.5,
+          tier: 'CRITICAL',
+          actionCode: 'TRANSACTION_FREEZE'
+        },
+        'scenario_digital_arrest_police': {
+          synthProb: 0.968,
+          hfAttenuation: 0.94,
+          pitchJitter: 0.0019,
+          spectralFlux: 0.031,
+          vocoderScore: 0.95,
+          spkStatus: 'UNENROLLED',
+          isMatch: false,
+          spkCosine: 0.05,
+          spkMatchPct: 5.0,
+          spkRisk: 0.92,
+          threatScore: 0.96,
+          threatLevel: 'CRITICAL_ATTACK',
+          phrases: ['arrest warrant', 'money laundering', 'digital arrest', 'judicial escrow account', 'police will raid'],
+          intents: ['DIGITAL_ARREST_COERCION', 'AUTHORITY_EXTORTION'],
+          cadence: 'Aggressive Synthetic Cadence & Unnatural Pauses',
+          overallRisk: 98.0,
+          tier: 'CRITICAL',
+          actionCode: 'TRANSACTION_FREEZE'
+        },
+        'scenario_grandchild_emergency': {
+          synthProb: 0.938,
+          hfAttenuation: 0.89,
+          pitchJitter: 0.0028,
+          spectralFlux: 0.039,
+          vocoderScore: 0.89,
+          spkStatus: 'MATCH_CONFIRMED',
+          isMatch: false,
+          spkCosine: 0.918,
+          spkMatchPct: 91.8,
+          spkRisk: 0.84,
+          threatScore: 0.91,
+          threatLevel: 'CRITICAL_ATTACK',
+          phrases: ['terrible road accident', 'emergency ICU deposit of ₹75,000', 'approve the UPI transfer immediately'],
+          intents: ['FAMILY_IMPERSONATION', 'MEDICAL_PANIC_EXTORTION'],
+          cadence: 'Synthesized Panic Prosody with High Frequency Rolloff',
+          overallRisk: 92.0,
+          tier: 'CRITICAL',
+          actionCode: 'TRANSACTION_FREEZE'
+        },
+        'scenario_legitimate_bank_support': {
+          synthProb: 0.038,
+          hfAttenuation: 0.14,
+          pitchJitter: 0.024,
+          spectralFlux: 0.192,
+          vocoderScore: 0.08,
+          spkStatus: 'MATCH_CONFIRMED',
+          isMatch: true,
+          spkCosine: 0.988,
+          spkMatchPct: 98.8,
+          spkRisk: 0.01,
+          threatScore: 0.03,
+          threatLevel: 'CLEAN',
+          phrases: [],
+          intents: ['INFORMATIONAL_SUPPORT'],
+          cadence: 'Natural Human Pitch Fluctuation & Shimmer',
+          overallRisk: 5.5,
+          tier: 'LOW',
+          actionCode: 'ALLOW'
+        }
+      };
+
+      const prof = SCENARIO_PROFILES[scenarioId] || (isSynth ? SCENARIO_PROFILES['scenario_ds_UK_male_4_synthetic_1'] : SCENARIO_PROFILES['scenario_legitimate_bank_support']);
+
+      const synthProb = prof.synthProb;
+      const spkRisk = prof.spkRisk;
+      const behScore = prof.threatScore;
+      const rawScore = prof.overallRisk;
+      const tier = prof.tier;
+      const actionCode = prof.actionCode;
 
       const expFactor = amount > 0 ? Math.min(1.0, Math.max(0.05, (Math.log10(Math.max(amount, 100)) - 2.0) / 4.0)) : 0.05;
-      let rawScore = (0.35 * synthProb + 0.25 * spkRisk + 0.15 * expFactor + 0.15 * behScore + 0.10 * 0.10) * 100.0;
-      if (isSynth) rawScore = Math.max(rawScore, 84.5);
-      const tier = rawScore <= 25 ? 'LOW' : (rawScore <= 50 ? 'MODERATE' : (rawScore <= 75 ? 'HIGH' : 'CRITICAL'));
-      const actionCode = tier === 'LOW' ? 'ALLOW' : (tier === 'MODERATE' ? 'ALERT' : (tier === 'HIGH' ? 'DYNAMIC_CHALLENGE' : 'TRANSACTION_FREEZE'));
 
       const mockResult = {
         session_id: `SCENARIO-${scenarioId.toUpperCase().slice(0, 10)}-STATIC`,
-        latency_ms: 14.2,
-        audio_duration_sec: 4.5,
+        latency_ms: 12.4 + Math.round(Math.random() * 5),
+        audio_duration_sec: sc.audio_duration_sec || 5.2,
         scenario_meta: sc,
         authenticity: {
           synthetic_probability: synthProb,
@@ -201,32 +398,32 @@ const Scenarios = {
           classification: isSynth ? 'SYNTHETIC_CLONE' : 'GENUINE_VOICE',
           verdict: isSynth ? 'SYNTHETIC_VOICE_CLONE' : 'AUTHENTIC_HUMAN_VOICE',
           vocoder_metrics: {
-            hf_attenuation_ratio: isSynth ? 0.89 : 0.18,
-            spectral_flux: isSynth ? 0.042 : 0.185,
-            pitch_jitter: isSynth ? 0.003 : 0.016,
+            hf_attenuation_ratio: prof.hfAttenuation,
+            spectral_flux: prof.spectralFlux,
+            pitch_jitter: prof.pitchJitter,
             amplitude_shimmer: isSynth ? 0.009 : 0.038,
-            vocoder_artifact_score: isSynth ? 0.84 : 0.12
+            vocoder_artifact_score: prof.vocoderScore
           }
         },
         speaker_verification: {
           claimed_speaker: sc.claimed_speaker_name,
-          verification_status: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 'UNENROLLED' : 'MATCH_CONFIRMED') : 'MATCH_CONFIRMED',
-          is_match: !isSynth,
-          cosine_similarity: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.0 : 0.94) : 1.0,
-          match_confidence_pct: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.0 : 94.9) : 100.0,
+          verification_status: prof.spkStatus,
+          is_match: prof.isMatch,
+          cosine_similarity: prof.spkCosine,
+          match_confidence_pct: prof.spkMatchPct,
           speaker_mismatch_risk: spkRisk,
           description: isSynth ? 'Voice biometric signature diverged significantly from enrolled voiceprint or matched cloned victim profile.' : 'Biometric acoustic embeddings match enrolled voiceprint profile.'
         },
         threat_intelligence: {
           behavioral_threat_score: behScore,
-          threat_level: isSynth ? 'HIGH_COERCION' : 'NORMAL_INTERACTION',
+          threat_level: prof.threatLevel,
           is_coercive_threat: isSynth,
           text_analysis: {
-            threat_level: isSynth ? (scenarioId === 'scenario_digital_arrest_police' || scenarioId === 'scenario_grandchild_emergency' ? 'CRITICAL_ATTACK' : 'ELEVATED') : 'CLEAN',
-            detected_phrases: isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? ['arrest warrant', 'digital arrest', 'judicial escrow'] : (scenarioId === 'scenario_grandchild_emergency' ? ['road accident', 'emergency ICU', 'hospital doctor'] : ['urgent closed-door board meeting', 'immediate wire transfer', 'secure the contract'])) : []
+            threat_level: prof.threatLevel,
+            detected_phrases: prof.phrases
           },
-          detected_intents: isSynth ? ['URGENT_DEMAND', 'UNAUTHORIZED_ESCROW', 'DIGITAL_COERCION'] : ['INFORMATIONAL_SUPPORT'],
-          cadence_anomaly: isSynth ? 'High Artificial Stress & Cadence Flux' : 'Natural Human Speech Prosody'
+          detected_intents: prof.intents,
+          cadence_anomaly: prof.cadence
         },
         risk_evaluation: {
           overall_risk_score: roundVal(rawScore, 1),
@@ -301,6 +498,8 @@ const Scenarios = {
       `;
     }
 
+    const audioSrc = sc.audio_url || (sc.audio_filename ? `audio/${sc.audio_filename}` : `/api/audio/sample/${sc.id}`);
+
     container.innerHTML = `
       ${bannerHtml}
       
@@ -312,7 +511,7 @@ const Scenarios = {
             ${sc.is_synthetic_ground_truth ? 'GROUND-TRUTH: AI SYNTHETIC CLONE (1)' : 'GROUND-TRUTH: REAL HUMAN VOICE (0)'}
           </span>
         </div>
-        <audio controls src="/api/audio/sample/${sc.id || sc.audio_filename}" style="height:34px;"></audio>
+        <audio controls src="${audioSrc}" preload="metadata" style="height:34px;" onerror="if(!this.src.includes('/api/')) this.src='/api/audio/sample/' + ('${sc.id || sc.audio_filename}')"></audio>
       </div>
 
       <!-- 4 Intelligence Layer Breakdown Cards -->
