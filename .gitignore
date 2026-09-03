@@ -28,3 +28,10 @@ data/vault/
 .vscode/
 .agents/
 .gemini/
+
+# Presentations & Documents (sensitive team material)
+*.pptx
+*.ppt
+*.pdf
+*.docx
+*.doc
