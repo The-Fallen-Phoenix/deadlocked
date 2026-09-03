@@ -27,8 +27,6 @@ const Charts = {
 
   /**
    * Draws temporal anomaly probability timeline on canvas
-   * Accepts multiple field names for compatibility (synthetic_prob / synthetic_score etc.)
-   * and tolerates values in 0..1 or 0..100 ranges.
    */
   drawTemporalTimeline(canvas, slices) {
     if (!canvas || !slices || slices.length === 0) return;
@@ -58,14 +56,7 @@ const Charts = {
     const barWidth = Math.max(width / slices.length - 3, 4);
     slices.forEach((s, idx) => {
       const x = idx * (width / slices.length);
-
-      // Support multiple possible field names used across code (legacy and newer)
-      let probRaw = (s.synthetic_score ?? s.synthetic_prob ?? s.syntheticProbability ?? s.synthetic_probablity ?? s.synthetic ?? s.syntheticProbabilityPercent ?? 0);
-      // Normalize values: allow 0..1 or 0..100 inputs
-      if (typeof probRaw === 'string') probRaw = parseFloat(probRaw) || 0;
-      if (probRaw > 1) probRaw = probRaw > 100 ? 1 : probRaw / 100;
-      const prob = Math.max(0, Math.min(1, probRaw));
-
+      const prob = s.synthetic_prob;
       const barH = prob * (height - 10);
       const y = height - barH;
 

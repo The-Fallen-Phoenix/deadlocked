@@ -54,6 +54,19 @@ const Scenarios = {
       "target_beneficiary": null,
       "attack_type": "None (Legitimate Customer Support)",
       "is_synthetic_ground_truth": false
+    },
+    {
+      "id": "scenario_dataset_test",
+      "title": "Voice Dataset Benchmark Sample",
+      "category": "Dataset Analysis Benchmarking",
+      "description": "Synthetic voice clone sample extracted directly from the test split (UK Male) of the training dataset.",
+      "claimed_speaker_id": null,
+      "claimed_speaker_name": "Unknown Dataset Speaker (UK Male Test Split)",
+      "transcript": "(Dataset audio sample playing for forensic analysis)",
+      "transaction_amount_inr": 0.0,
+      "target_beneficiary": "N/A",
+      "attack_type": "Synthetic Voice Generation",
+      "is_synthetic_ground_truth": true
     }
   ],
 
