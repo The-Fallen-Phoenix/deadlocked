@@ -4,6 +4,62 @@
 const Scenarios = {
   DEFAULT_SCENARIOS: [
     {
+      "id": "scenario_ds_UK_male_4_synthetic_1",
+      "title": "UK Male Speaker #4 — AI Voice Clone (synthetic_1)",
+      "category": "Voice Dataset | UK Male Cloned Vector",
+      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
+      "claimed_speaker_id": "spk_uk_male_4",
+      "claimed_speaker_name": "Speaker UK Male #4",
+      "audio_filename": "synthetic_1.mp3",
+      "transcript": "Emergency request: Please process ₹250,000 immediately to our escrow account before 2 PM.",
+      "transaction_amount_inr": 250000.0,
+      "target_beneficiary": "Fraudulent Escrow VPA (Unverified Payee)",
+      "attack_type": "AI Voice Cloning + Coercion Extortion",
+      "is_synthetic_ground_truth": true
+    },
+    {
+      "id": "scenario_ds_UK_female_1_synthetic_2",
+      "title": "UK Female Speaker #1 — AI Voice Clone (synthetic_2)",
+      "category": "Voice Dataset | UK Female Cloned Vector",
+      "description": "Synthetic voice clone from held-out 20% test split. Ground-Truth: FAKE (Label 1).",
+      "claimed_speaker_id": "spk_uk_female_1",
+      "claimed_speaker_name": "Speaker UK Female #1",
+      "audio_filename": "synthetic_2.mp3",
+      "transcript": "Urgent security notice: Immediate ₹300,000 wire required to verify bank routing clearance.",
+      "transaction_amount_inr": 300000.0,
+      "target_beneficiary": "Offshore Clearing Escrow (Fraudulent Account)",
+      "attack_type": "AI Voice Cloning + Financial Fraud",
+      "is_synthetic_ground_truth": true
+    },
+    {
+      "id": "scenario_ds_UK_female_4_original",
+      "title": "UK Female Speaker #4 — Authentic Human Voice",
+      "category": "Voice Dataset | UK Female Genuine Baseline",
+      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
+      "claimed_speaker_id": "spk_uk_female_4",
+      "claimed_speaker_name": "Speaker UK Female #4",
+      "audio_filename": "original.m4a",
+      "transcript": "Good morning, this is authentic human speech from test speaker #4. No transaction required.",
+      "transaction_amount_inr": 0.0,
+      "target_beneficiary": null,
+      "attack_type": "Legitimate Customer Verification",
+      "is_synthetic_ground_truth": false
+    },
+    {
+      "id": "scenario_ds_UK_male_3_original",
+      "title": "UK Male Speaker #3 — Authentic Human Voice",
+      "category": "Voice Dataset | UK Male Genuine Baseline",
+      "description": "Genuine human vocal tract recording from held-out 20% test split. Ground-Truth: REAL (Label 0).",
+      "claimed_speaker_id": "spk_uk_male_3",
+      "claimed_speaker_name": "Speaker UK Male #3",
+      "audio_filename": "original.wav",
+      "transcript": "Good morning, this is authentic human speech from test speaker #3. No transaction required.",
+      "transaction_amount_inr": 0.0,
+      "target_beneficiary": null,
+      "attack_type": "Legitimate Customer Verification",
+      "is_synthetic_ground_truth": false
+    },
+    {
       "id": "scenario_ceo_wire_transfer",
       "title": "CEO Urgent Wire Transfer Scam",
       "category": "Corporate Executive Impersonation",
@@ -30,19 +86,6 @@ const Scenarios = {
       "is_synthetic_ground_truth": true
     },
     {
-      "id": "scenario_grandchild_emergency",
-      "title": "Grandchild Emergency ICU Scam",
-      "category": "Family Impersonation Extortion",
-      "description": "AI-generated voice clone of a grandchild claiming to be in a hospital accident demanding an immediate ₹75,000 emergency deposit.",
-      "claimed_speaker_id": "spk_aarav",
-      "claimed_speaker_name": "Aarav Sharma (Enrolled Grandchild)",
-      "transcript": "Grandpa, please help me! I was in a terrible road accident and the hospital doctor needs an immediate emergency ICU deposit of ₹75,000 right now. Please approve the UPI transfer immediately, my phone is dying!",
-      "transaction_amount_inr": 75000.0,
-      "target_beneficiary": "City Care Emergency Clinic (Unverified UPI VPA)",
-      "attack_type": "Family Voice Clone + Urgent Medical Distress",
-      "is_synthetic_ground_truth": true
-    },
-    {
       "id": "scenario_legitimate_bank_support",
       "title": "Legitimate Bank Support Verification",
       "category": "Normal Banking Interaction",
@@ -54,19 +97,6 @@ const Scenarios = {
       "target_beneficiary": null,
       "attack_type": "None (Legitimate Customer Support)",
       "is_synthetic_ground_truth": false
-    },
-    {
-      "id": "scenario_dataset_test",
-      "title": "Voice Dataset Benchmark Sample",
-      "category": "Dataset Analysis Benchmarking",
-      "description": "Synthetic voice clone sample extracted directly from the test split (UK Male) of the training dataset.",
-      "claimed_speaker_id": null,
-      "claimed_speaker_name": "Unknown Dataset Speaker (UK Male Test Split)",
-      "transcript": "(Dataset audio sample playing for forensic analysis)",
-      "transaction_amount_inr": 0.0,
-      "target_beneficiary": "N/A",
-      "attack_type": "Synthetic Voice Generation",
-      "is_synthetic_ground_truth": true
     }
   ],
 
@@ -150,9 +180,9 @@ const Scenarios = {
       const isSynth = sc.is_synthetic_ground_truth;
       const amount = sc.transaction_amount_inr;
 
-      const synthProb = isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.94 : (scenarioId === 'scenario_grandchild_emergency' ? 0.91 : 0.88)) : 0.04;
+      const synthProb = isSynth ? 0.935 : 0.05;
       const spkRisk = isSynth ? 0.85 : 0.02;
-      const behScore = isSynth ? (scenarioId === 'scenario_digital_arrest_police' ? 0.92 : (scenarioId === 'scenario_grandchild_emergency' ? 0.84 : 0.78)) : 0.05;
+      const behScore = isSynth ? (amount >= 250000 ? 0.88 : 0.76) : 0.05;
 
       const expFactor = amount > 0 ? Math.min(1.0, Math.max(0.05, (Math.log10(Math.max(amount, 100)) - 2.0) / 4.0)) : 0.05;
       let rawScore = (0.35 * synthProb + 0.25 * spkRisk + 0.15 * expFactor + 0.15 * behScore + 0.10 * 0.10) * 100.0;
