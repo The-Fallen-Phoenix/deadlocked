@@ -4,7 +4,7 @@ Combines PyTorch Spectrogram-ResNet + Multi-Head Temporal Attention with Physica
 """
 
 import math
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 import numpy as np
 import torch
 import torch.nn as nn
