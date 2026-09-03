@@ -709,3 +709,126 @@ body {
   cursor: pointer;
   box-shadow: 0 0 12px var(--accent-orange);
 }
+
+/* ===================================================
+   RESPONSIVE DESIGN (Mobile, Tablet, Desktop)
+   =================================================== */
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .kpi-bar {
+    padding: 0.75rem 1rem;
+  }
+
+  .kpi-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .kpi-card {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .kpi-value {
+    font-size: 1.15rem;
+  }
+
+  .nav-tabs {
+    padding: 0 0.5rem;
+  }
+
+  .tabs-container {
+    gap: 0.35rem;
+    padding: 0.5rem 0;
+  }
+
+  .tab-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .main-wrapper {
+    padding: 1rem 0.75rem 3rem;
+  }
+
+  .glass-card {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .grid-1-2, .grid-2-1, .grid-2, .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .scenario-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-gauge-container {
+    margin: 0.5rem auto;
+  }
+
+  .prevention-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+
+  .visualizer-box {
+    height: 110px;
+  }
+
+  .btn {
+    min-height: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-title h1 {
+    font-size: 1.1rem;
+  }
+
+  .brand-title p {
+    font-size: 0.65rem;
+  }
+
+  .ps-badge {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .kpi-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .risk-circle svg {
+    width: 130px;
+    height: 130px;
+  }
+
+  .risk-circle circle {
+    cx: 65px;
+    cy: 65px;
+    r: 55px;
+    stroke-dasharray: 345;
+  }
+
+  .risk-number-overlay .score {
+    font-size: 1.8rem;
+  }
+}
+
