@@ -57,6 +57,8 @@ if static_dir.exists():
         app.mount("/css", StaticFiles(directory=str(static_dir / "css")), name="css")
     if (static_dir / "js").exists():
         app.mount("/js", StaticFiles(directory=str(static_dir / "js")), name="js")
+    if (static_dir / "audio").exists():
+        app.mount("/audio", StaticFiles(directory=str(static_dir / "audio")), name="audio")
 
 
 # Pydantic Request Models
@@ -377,11 +379,11 @@ async def get_sample_audio(identifier: str):
     if sc and "audio_filepath" in sc and Path(sc["audio_filepath"]).exists():
         filepath = Path(sc["audio_filepath"])
 
-    # 2. Try sample_audio_dir
+    # 2. Try static/audio directory
     if not filepath:
-        candidate = settings.sample_audio_dir / identifier
-        if candidate.exists():
-            filepath = candidate
+        candidate_static = static_dir / "audio" / identifier
+        if candidate_static.exists():
+            filepath = candidate_static
 
     # 3. Search voice_dataset by path or basename
     if not filepath:
