@@ -15,6 +15,9 @@ from sentry.audio.preprocessor import audio_preprocessor
 from sentry.audio.features import feature_extractor
 
 
+from pathlib import Path
+
+
 class ConvBlock(nn.Module):
     """Residual 2D Convolutional block for spectro-temporal feature extraction."""
 
@@ -97,9 +100,7 @@ class SentryAcousticClassifier(nn.Module):
         x_lfcc = self.lfcc_res1(self.lfcc_entry(lfcc))
 
         # Spatial Pool over frequency dimension
-        # [B, 128, T']
         p_mel = torch.mean(x_mel, dim=2)
-        # [B, 64, T']
         p_lfcc = torch.mean(x_lfcc, dim=2)
 
         # Align time dimensions if slightly mismatched
@@ -126,21 +127,25 @@ class AuthenticityDetector:
     Ensembles deep neural representations with physical vocoder acoustic signatures.
     """
 
-    def __init__(self, checkpoint_path: str = "data/models_cache/best_authenticity_model.pt"):
+    def __init__(self, checkpoint_path: Optional[str] = None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = SentryAcousticClassifier().to(self.device)
-        
-        # Load retrained model checkpoint if available
-        ckpt_file = torch.Path(checkpoint_path) if hasattr(torch, "Path") else None
-        from pathlib import Path
-        ckpt_path = Path(checkpoint_path)
-        if ckpt_path.exists():
-            try:
-                state_dict = torch.load(str(ckpt_path), map_location=self.device)
-                self.model.load_state_dict(state_dict)
-                print(f"[*] AuthenticityDetector successfully loaded trained model checkpoint from {ckpt_path}")
-            except Exception as e:
-                print(f"[!] Warning: Could not load model checkpoint from {ckpt_path}: {e}")
+
+        # Load trained weights if checkpoint exists
+        candidates = [
+            Path(checkpoint_path) if checkpoint_path else None,
+            settings.data_dir / "models_cache" / "best_authenticity_model.pt",
+            Path("data/models_cache/best_authenticity_model.pt")
+        ]
+        for ckpt in candidates:
+            if ckpt and ckpt.exists():
+                try:
+                    state_dict = torch.load(str(ckpt), map_location=self.device)
+                    self.model.load_state_dict(state_dict)
+                    print(f"[*] AuthenticityDetector loaded model checkpoint from {ckpt}")
+                    break
+                except Exception as e:
+                    print(f"[!] Warning: Failed loading checkpoint {ckpt}: {e}")
 
         self.model.eval()
 
@@ -175,11 +180,12 @@ class AuthenticityDetector:
             probs = F.softmax(logits, dim=1).cpu().numpy()[0]
             raw_neural_synth_prob = float(probs[1])
 
-        # 2. Neural Probabilistic Classification & Vocoder Diagnostic Metrics
-        # Use trained neural feature representation as primary probability source
+        # 2. Physics-Informed Vocoder Fusion
         vocoder_score = vocoder_metrics["vocoder_artifact_score"]
         
-        hybrid_synth_prob = float(np.clip(raw_neural_synth_prob, 0.001, 0.999))
+        # Weighted hybrid ensemble: 80% neural representation + 20% vocoder anomaly score
+        hybrid_synth_prob = 0.80 * raw_neural_synth_prob + 0.20 * vocoder_score
+        hybrid_synth_prob = float(np.clip(hybrid_synth_prob, 0.01, 0.99))
         genuine_prob = 1.0 - hybrid_synth_prob
 
         # Categorize

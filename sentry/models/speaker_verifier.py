@@ -71,9 +71,26 @@ class SpeakerVerifier:
     Extracts speaker embeddings and evaluates claimed identity match.
     """
 
-    def __init__(self):
+    def __init__(self, checkpoint_path: Optional[str] = None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = SentrySpeakerEmbeddingNet().to(self.device)
+
+        from pathlib import Path
+        candidates = [
+            Path(checkpoint_path) if checkpoint_path else None,
+            settings.data_dir / "models_cache" / "best_speaker_embedding_net.pt",
+            Path("data/models_cache/best_speaker_embedding_net.pt")
+        ]
+        for ckpt in candidates:
+            if ckpt and ckpt.exists():
+                try:
+                    state_dict = torch.load(str(ckpt), map_location=self.device)
+                    self.model.load_state_dict(state_dict)
+                    print(f"[*] SpeakerVerifier loaded model checkpoint from {ckpt}")
+                    break
+                except Exception as e:
+                    print(f"[!] Warning: Failed loading speaker checkpoint {ckpt}: {e}")
+
         self.model.eval()
         self.match_threshold = settings.biometrics.match_threshold
 

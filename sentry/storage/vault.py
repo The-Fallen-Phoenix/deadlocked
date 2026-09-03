@@ -43,8 +43,8 @@ class BiometricVault:
                 print(f"Error loading biometric embeddings: {e}")
                 self.embeddings_matrix = {}
 
-        # If vault is empty, initialize with default reference profiles
-        if not self.speakers:
+        # If vault is empty or embeddings missing, initialize with default reference profiles
+        if not self.speakers or not self.embeddings_matrix:
             self._initialize_default_profiles()
 
     def _save_vault(self):
@@ -114,12 +114,14 @@ class BiometricVault:
     def _initialize_default_profiles(self):
         """Creates initial reference voiceprints for the SIH demo."""
         from sentry.audio.synth_generator import scenario_generator
+        from sentry.audio.preprocessor import audio_preprocessor
 
         defaults = [
             {
                 "id": "spk_rithwik",
                 "name": "Rithwik Sriram",
                 "role": "Team Leader & Project Manager",
+                "filename": "rithwik_executive_enrolled_reference.wav",
                 "f0": 132.0,
                 "org": "Team Deadlocked / IITM"
             },
@@ -127,6 +129,7 @@ class BiometricVault:
                 "id": "spk_sahil",
                 "name": "Sahil Singh",
                 "role": "Backend Lead & Support Rep",
+                "filename": "legitimate_support_genuine.wav",
                 "f0": 135.0,
                 "org": "Deadlocked Banking Ops"
             },
@@ -134,18 +137,29 @@ class BiometricVault:
                 "id": "spk_aarav",
                 "name": "Aarav Sharma",
                 "role": "Enrolled Family Member",
+                "filename": None,
                 "f0": 180.0,
                 "org": "Personal Vault"
             }
         ]
 
         for d in defaults:
-            audio = scenario_generator.generate_formant_speech(
-                duration_sec=4.0,
-                base_f0=d["f0"],
-                is_synthetic=False,
-                vocoder_noise=0.01
-            )
+            audio = None
+            if d.get("filename"):
+                cand = settings.sample_audio_dir / d["filename"]
+                if cand.exists():
+                    try:
+                        audio, _ = audio_preprocessor.load_audio_from_file(cand)
+                    except Exception:
+                        pass
+            if audio is None:
+                audio = scenario_generator.generate_formant_speech(
+                    duration_sec=4.0,
+                    base_f0=d["f0"],
+                    is_synthetic=False,
+                    vocoder_noise=0.01
+                )
+
             self.enroll_speaker(
                 speaker_id=d["id"],
                 display_name=d["name"],

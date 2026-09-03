@@ -65,6 +65,13 @@ class SentryRiskEngine:
         c_ctx = (w_ctx / total_weight) * context_risk
 
         raw_score = (c_synth + c_spk + c_exp + c_beh + c_ctx) * 100.0
+        # Security Policy: Synthetic voice clone combined with substantial financial exposure or coercion triggers immediate defense
+        if synthetic_prob >= 0.70:
+            if transaction_amount_inr >= 100000.0 or behavioral_threat_score >= 0.40:
+                raw_score = max(raw_score, 84.5)  # Escalate to CRITICAL (Freeze / Hold)
+            else:
+                raw_score = max(raw_score, 68.0)  # Escalate to HIGH (Step-Up Challenge)
+
         raw_score = float(np.clip(raw_score, 0.0, 100.0))
 
         # Determine Risk Tier and Action Code
