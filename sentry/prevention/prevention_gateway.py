@@ -5,7 +5,9 @@ Transaction Freeze/Hold, Step-Up Dynamic Verification, Alert Overlays, and Incid
 """
 
 import time
+import json
 import uuid
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 from sentry.core.config import settings
@@ -17,8 +19,66 @@ class PreventionGateway:
     """Dispatches automated prevention countermeasures based on dynamic risk thresholds."""
 
     def __init__(self):
-        # In-memory ledger of held / active transactions
+        self.holds_file = settings.incidents_dir / "held_transactions.json"
         self.held_transactions: Dict[str, Dict[str, Any]] = {}
+        self._load_held_transactions()
+
+    def _load_held_transactions(self):
+        """Loads held transactions from disk or seeds realistic initial records."""
+        if self.holds_file.exists():
+            try:
+                with open(self.holds_file, "r", encoding="utf-8") as f:
+                    self.held_transactions = json.load(f)
+                    return
+            except Exception as e:
+                print(f"[!] Error loading held transactions: {e}")
+
+        # Seed realistic attack-vector held transactions
+        now = time.time()
+        self.held_transactions = {
+            "HOLD-CEO-8821": {
+                "hold_id": "HOLD-CEO-8821",
+                "session_id": "SES-SCENARIO-CEO-9605",
+                "caller_id": "Rithwik Sriram (Executive Profile)",
+                "amount_inr": 500000.0,
+                "beneficiary": "Acme Ventures Holdings (Unregistered Payee)",
+                "risk_score": 94.2,
+                "reason": "CRITICAL AI Voice Cloning & Executive Impersonation (94.2% Synthetic Risk)",
+                "status": "HELD_PENDING_FORENSIC_REVIEW",
+                "timestamp": now - 3600
+            },
+            "HOLD-CBI-3942": {
+                "hold_id": "HOLD-CBI-3942",
+                "session_id": "SES-SCENARIO-POLICE-4412",
+                "caller_id": "Inspector Verma (Claimed Official)",
+                "amount_inr": 250000.0,
+                "beneficiary": "Judicial Escrow Account #8821 (Fraudulent)",
+                "risk_score": 89.6,
+                "reason": "CRITICAL Digital Arrest Coercion & Synthetic Police Impersonation",
+                "status": "HELD_PENDING_FORENSIC_REVIEW",
+                "timestamp": now - 1800
+            },
+            "HOLD-MED-1094": {
+                "hold_id": "HOLD-MED-1094",
+                "session_id": "SES-SCENARIO-MED-7719",
+                "caller_id": "Emergency Casualty Desk (Claimed Hospital)",
+                "amount_inr": 180000.0,
+                "beneficiary": "City Care Hospital ICU Escrow",
+                "risk_score": 84.5,
+                "reason": "CRITICAL Voice Biometric Mismatch & Extortion Urgency",
+                "status": "HELD_PENDING_FORENSIC_REVIEW",
+                "timestamp": now - 900
+            }
+        }
+        self._save_held_transactions()
+
+    def _save_held_transactions(self):
+        """Persists held transactions to disk."""
+        try:
+            with open(self.holds_file, "w", encoding="utf-8") as f:
+                json.dump(self.held_transactions, f, indent=2)
+        except Exception as e:
+            print(f"[!] Error saving held transactions: {e}")
 
     def execute_policy(
         self,
@@ -63,6 +123,7 @@ class PreventionGateway:
                 "timestamp": time.time()
             }
             self.held_transactions[hold_id] = hold_record
+            self._save_held_transactions()
 
             action_result.update({
                 "transaction_status": "FROZEN_HELD",
@@ -157,6 +218,7 @@ class PreventionGateway:
             record["status"] = "RELEASED_BY_SOC"
             record["released_by"] = officer_id
             record["release_timestamp"] = time.time()
+            self._save_held_transactions()
             
             audit_logger.log_event(
                 event_type="TRANSACTION_HOLD_RELEASED",

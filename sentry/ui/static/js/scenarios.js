@@ -2,6 +2,7 @@
  * Attack Scenario Studio & Test Bench for SENTRY
  */
 
+const Scenarios = {
   DEFAULT_SCENARIOS: [
     {
       "id": "scenario_ceo_wire_transfer",

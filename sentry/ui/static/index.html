@@ -82,17 +82,13 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         Attack Scenario Test Bench
       </button>
+      <button class="tab-btn" data-tab="tab-forensics">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        Audio File Forensics
+      </button>
       <button class="tab-btn" data-tab="tab-vault">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        Biometric Identity Vault
-      </button>
-      <button class="tab-btn" data-tab="tab-forensics">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        Forensics & Explainability Lab
-      </button>
-      <button class="tab-btn" data-tab="tab-roi">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Enterprise ROI Simulator
+        Biometric Vault
       </button>
       <button class="tab-btn" data-tab="tab-incidents">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -103,7 +99,6 @@
         AI Models & Benchmarks
       </button>
       <button class="tab-btn" data-tab="tab-api">
-
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
         Developer API
       </button>
@@ -264,7 +259,56 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3: BIOMETRIC VAULT ==================== -->
+    <!-- ==================== TAB 3: AUDIO FILE FORENSICS ==================== -->
+    <div class="tab-panel" id="tab-forensics">
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            Audio File Forensics & Deep Diagnostics
+          </div>
+          <span class="badge badge-low">WAV / MP3 / M4A Supported</span>
+        </div>
+
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+          Upload any audio recording to run complete multi-factor forensics: vocoder physical anomalies, acoustic synthetic probability, speaker biometric match, and cryptographic dossier generation.
+        </p>
+
+        <form id="audio-upload-form" class="grid-2">
+          <div>
+            <div class="form-group">
+              <label class="form-label">Audio File</label>
+              <input type="file" id="upload-audio-file" accept="audio/*" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Claimed Speaker Profile (Optional)</label>
+              <select id="upload-claimed-speaker" class="form-select">
+                <option value="">-- No Enrolled Claim (Anonymous) --</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label class="form-label">In-Flight Transaction Exposure (₹ INR)</label>
+              <input type="number" id="upload-tx-amount" class="form-input" placeholder="e.g. 50000" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Spoken Transcript / Intent (Optional)</label>
+              <input type="text" id="upload-transcript" class="form-input" placeholder="e.g. Please approve the urgent transfer immediately">
+            </div>
+          </div>
+          <div style="grid-column: 1 / -1; margin-top:0.25rem;">
+            <button type="submit" class="btn btn-primary" style="width:100%;">
+              Run 4-Layer Forensic Analysis
+            </button>
+          </div>
+        </form>
+
+        <div id="upload-result-container"></div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: BIOMETRIC VAULT ==================== -->
     <div class="tab-panel" id="tab-vault">
       <div class="glass-card">
         <div class="card-header">
@@ -276,7 +320,7 @@
         </div>
 
         <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
-          SENTRY stores 256-dimensional unit-hypersphere speaker voiceprints with cryptographic tamper-evident signatures. Raw acoustic recordings are not persistently stored, ensuring privacy-by-design compliance.
+          256-dimensional unit-hypersphere speaker voiceprints with tamper-evident HMAC signatures. Raw audio is never stored.
         </p>
 
         <div style="overflow-x:auto;">
@@ -295,150 +339,6 @@
               <tr><td colspan="6" style="text-align:center; padding:1.5rem;">Loading biometric vault...</td></tr>
             </tbody>
           </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 4: FORENSICS & UPLOAD ==================== -->
-    <div class="tab-panel" id="tab-forensics">
-      <div class="glass-card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            Upload Audio for Deep Spectro-Temporal Forensics
-          </div>
-          <span class="badge badge-low">WAV / MP3 / M4A Supported</span>
-        </div>
-
-        <form id="audio-upload-form" class="grid-2">
-          <div>
-            <div class="form-group">
-              <label class="form-label">Audio File</label>
-              <input type="file" id="upload-audio-file" accept="audio/*" class="form-input" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Claimed Speaker Profile</label>
-              <select id="upload-claimed-speaker" class="form-select">
-                <option value="">-- No Enrolled Claim (Anonymous) --</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <div class="form-group">
-              <label class="form-label">In-Flight Transaction Exposure (₹ INR)</label>
-              <input type="number" id="upload-tx-amount" class="form-input" placeholder="e.g. 500000" value="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Spoken Transcript / Intent (Optional)</label>
-              <textarea id="upload-transcript" class="form-textarea" rows="2" placeholder="e.g. Please approve the urgent transfer immediately"></textarea>
-            </div>
-          </div>
-          <div style="grid-column: 1 / -1;">
-            <button type="submit" class="btn btn-primary" style="width:100%;">
-              Run 4-Layer Forensic Analysis
-            </button>
-          </div>
-        </form>
-
-        <div id="upload-result-container"></div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 5: ROI SIMULATOR ==================== -->
-    <div class="tab-panel" id="tab-roi">
-      <div class="glass-card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Enterprise Financial Impact & ROI What-If Simulator
-          </div>
-          <span class="badge badge-low">Scenario Modeling Engine</span>
-        </div>
-
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem;">
-          Estimate economic value created, avoided fraud exposure, and return on investment for Mid-Size Banks, Telecoms, and Fintech Payment Gateways.
-        </p>
-
-        <div class="grid-2">
-          
-          <!-- Interactive Sliders -->
-          <div>
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Annual Voice / Payment Interactions:</span>
-                <span class="slider-val" id="val-annual-calls">12.0 Million</span>
-              </div>
-              <input type="range" id="roi-annual-calls" class="range-slider" min="1000000" max="50000000" step="1000000" value="12000000">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Average Transaction Ticket Value:</span>
-                <span class="slider-val" id="val-avg-ticket">₹25,000</span>
-              </div>
-              <input type="range" id="roi-avg-ticket" class="range-slider" min="5000" max="100000" step="5000" value="25000">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Estimated Fraud Incident Rate:</span>
-                <span class="slider-val" id="val-fraud-rate">0.15%</span>
-              </div>
-              <input type="range" id="roi-fraud-rate" class="range-slider" min="0.02" max="1.00" step="0.01" value="0.15">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>SENTRY Detection & Prevention Lift:</span>
-                <span class="slider-val" id="val-efficacy">65%</span>
-              </div>
-              <input type="range" id="roi-efficacy" class="range-slider" min="30" max="95" step="5" value="65">
-            </div>
-
-            <div class="slider-group">
-              <div class="slider-label">
-                <span>Annual Platform Operating Cost:</span>
-                <span class="slider-val" id="val-cost">₹24 Lakhs</span>
-              </div>
-              <input type="range" id="roi-cost" class="range-slider" min="500000" max="10000000" step="500000" value="2400000">
-            </div>
-          </div>
-
-          <!-- Output Metric Cards -->
-          <div style="display:flex; flex-direction:column; justify-content:space-between; gap:1rem;">
-            <div class="grid-2">
-              <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:0.85rem; border-radius:8px;">
-                <span style="font-size:0.75rem; color:#fca5a5;">Estimated Loss Before SENTRY</span>
-                <strong id="res-exposure-before" style="font-size:1.4rem; color:#ef4444; display:block; margin-top:0.2rem;">₹4.50 Cr</strong>
-              </div>
-              <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:0.85rem; border-radius:8px;">
-                <span style="font-size:0.75rem; color:#6ee7b7;">Potential Exposure Avoided</span>
-                <strong id="res-avoided-loss" style="font-size:1.4rem; color:#10b981; display:block; margin-top:0.2rem;">₹2.92 Cr</strong>
-              </div>
-            </div>
-
-            <div class="grid-2">
-              <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); padding:0.85rem; border-radius:8px;">
-                <span style="font-size:0.75rem; color:#7dd3fc;">Net Annual Financial Savings</span>
-                <strong id="res-net-savings" style="font-size:1.4rem; color:var(--accent-cyan); display:block; margin-top:0.2rem;">₹2.68 Cr</strong>
-              </div>
-              <div style="background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.3); padding:0.85rem; border-radius:8px;">
-                <span style="font-size:0.75rem; color:#c4b5fd;">Enterprise ROI Multiplier</span>
-                <strong id="res-roi-mult" style="font-size:1.4rem; color:var(--accent-violet); display:block; margin-top:0.2rem;">12.2x</strong>
-              </div>
-            </div>
-
-            <div style="background:rgba(0,0,0,0.3); padding:0.85rem; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <span style="font-size:0.75rem; color:var(--text-muted);">Platform Break-Even Period:</span>
-                <strong id="res-breakeven" style="color:#e2e8f0; margin-left:0.5rem;">1.0 Months</strong>
-              </div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">
-                Residual Exposure: <strong id="res-residual-exposure" style="color:#fbbf24;">₹1.58 Cr</strong>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -468,6 +368,36 @@
             </thead>
             <tbody id="held-transactions-body">
               <tr><td colspan="6" style="text-align:center; padding:1.5rem;">Loading held transactions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Forensic Incident Dossiers -->
+      <div class="glass-card" style="margin-bottom:1.5rem;">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Cryptographically Signed Forensic Incident Dossiers (HMAC-SHA256)
+          </div>
+          <span class="badge badge-high">Tamper-Evident Evidence Store</span>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Incident ID</th>
+                <th>Timestamp (UTC)</th>
+                <th>Claimed Caller</th>
+                <th>Exposure</th>
+                <th>Risk Score & Tier</th>
+                <th>Voice Classification</th>
+                <th>Forensic Dossier</th>
+              </tr>
+            </thead>
+            <tbody id="incident-dossiers-body">
+              <tr><td colspan="7" style="text-align:center; padding:1.5rem;">Loading incident dossiers...</td></tr>
             </tbody>
           </table>
         </div>
@@ -545,7 +475,7 @@
 
       </div>
 
-      <!-- Multilingual Intent Tester & Foundation Model Hub -->
+      <!-- Multilingual Intent Tester & Edge Pipeline Specs -->
       <div class="grid-2">
         
         <!-- Multilingual Hindi / Hinglish Intent Tester -->
@@ -567,17 +497,32 @@
           <div id="ml-test-result" style="margin-top:1rem;"></div>
         </div>
 
-        <!-- Hugging Face Foundation Model Hub -->
+        <!-- SENTRY Multi-Layer Spec Summary -->
         <div class="glass-card">
           <div class="card-header">
             <div class="card-title">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-              Hugging Face Foundation Models Hub
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              SENTRY Edge Intelligence Pipeline
             </div>
-            <span class="badge badge-low">Hugging Face Hub Integrated</span>
+            <span class="badge badge-low">Sub-15ms Target</span>
           </div>
-          <div id="foundation-models-list" style="display:flex; flex-direction:column; gap:0.6rem;">
-            <p style="font-size:0.8rem; color:var(--text-muted);">Loading speech models...</p>
+          <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.8rem;">
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <strong style="color:var(--accent-orange-bright);">Layer 1: Dual-Branch ResNet + LFCC</strong>
+              <p style="color:var(--text-muted); font-size:0.75rem;">Detects vocoder phase inconsistencies and synthetic high-frequency cutoff in ~14ms.</p>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <strong style="color:var(--accent-orange-bright);">Layer 2: ECAPA-TDNN Biometric Verification</strong>
+              <p style="color:var(--text-muted); font-size:0.75rem;">Extracts 256-D speaker embeddings; verifies against enrolled HMAC vault.</p>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <strong style="color:var(--accent-orange-bright);">Layer 3: Linguistic Coercion & Social Engineering NLP</strong>
+              <p style="color:var(--text-muted); font-size:0.75rem;">Identifies digital arrest, emergency escrow, and urgent wire transfer coercion cues.</p>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <strong style="color:var(--accent-orange-bright);">Layer 4: Automated Circuit Breaker Gateway</strong>
+              <p style="color:var(--text-muted); font-size:0.75rem;">Calculates transaction loss exposure and triggers holds or step-up authentication.</p>
+            </div>
           </div>
         </div>
 
@@ -630,7 +575,7 @@ asyncio.run(stream_call())</div>
 
         <h4 style="font-size:0.9rem; color:var(--accent-cyan); margin:1.25rem 0 0.5rem;">3. Interactive OpenAPI Documentation</h4>
         <p style="font-size:0.85rem; color:var(--text-secondary);">
-          Access the interactive Swagger UI at <a href="/docs" target="_blank" style="color:var(--accent-cyan); text-decoration:underline;">http://localhost:8000/docs</a>.
+          Access the interactive Swagger UI at <a href="/docs" target="_blank" style="color:var(--accent-cyan); text-decoration:underline;">/docs</a>.
         </p>
       </div>
     </div>
@@ -638,9 +583,9 @@ asyncio.run(stream_call())</div>
   </main>
 
   <!-- Scripts -->
-  <script src="js/charts.js"></script>
-  <script src="js/audio_streamer.js"></script>
-  <script src="js/scenarios.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/charts.js?v=20260903_v5"></script>
+  <script src="js/audio_streamer.js?v=20260903_v5"></script>
+  <script src="js/scenarios.js?v=20260903_v5"></script>
+  <script src="js/app.js?v=20260903_v5"></script>
 </body>
 </html>
