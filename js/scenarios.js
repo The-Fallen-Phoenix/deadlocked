@@ -277,9 +277,12 @@ const Scenarios = {
       <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
         <div>
           <span style="font-size:0.75rem; color:var(--text-muted);">Audio File</span>
-          <p style="font-size:0.85rem; font-weight:600; color:#e2e8f0;">${sc.audio_filename || 'Audio Stream'} (${data.audio_duration_sec || 4.0}s)</p>
+          <p style="font-size:0.85rem; font-weight:600; color:#e2e8f0;">${sc.audio_filename || sc.id || 'Audio Stream'} (${data.audio_duration_sec || 4.0}s)</p>
+          <span class="badge ${sc.is_synthetic_ground_truth ? 'badge-critical' : 'badge-low'}" style="margin-top:0.3rem; display:inline-block;">
+            ${sc.is_synthetic_ground_truth ? 'GROUND-TRUTH: AI SYNTHETIC CLONE (1)' : 'GROUND-TRUTH: REAL HUMAN VOICE (0)'}
+          </span>
         </div>
-        <audio controls src="/api/audio/sample/${sc.audio_filename || sc.id}" style="height:34px;"></audio>
+        <audio controls src="/api/audio/sample/${sc.id || sc.audio_filename}" style="height:34px;"></audio>
       </div>
 
       <!-- 4 Intelligence Layer Breakdown Cards -->
